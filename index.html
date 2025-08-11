@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Мама может — социальная платформа #мамаможет</title>
+  <meta name="color-scheme" content="light" />
+  <style>
+    /* =========================================================
+       THEME & RESET (LIGHT ONLY)
+    ========================================================= */
+    :root{
+      --bg:#fcfbfe;--bg-weak:#f6f5fc;--text:#1f1534;--muted:#6d6385;
+      --primary:#7a3cff;--primary-weak:#ede6ff;--secondary:#16c7c3;--secondary-weak:#dff7f6;
+      --accent:#ff7ab6;
+      --card:#fff;--border:#eceafd;--radius:16px;--gap:16px;--maxw:1200px;
+      --shadow:0 12px 30px rgba(18,6,43,.06);--shadow-2:0 6px 18px rgba(18,6,43,.06);
+      --focus:0 0 0 3px rgba(122,60,255,.15);
+      --glass:rgba(255,255,255,.7);
+      --success:#22c55e;--danger:#e54848;--warning:#f5a524;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, color-mix(in oklab, var(--primary) 12%, transparent) 0%, transparent 60%),
+        radial-gradient(1000px 500px at 110% 10%, color-mix(in oklab, var(--secondary) 10%, transparent) 0%, transparent 50%),
+        linear-gradient(180deg,var(--bg) 0%, color-mix(in oklab, var(--bg) 80%, #fff) 100%);
+      background-attachment: fixed;
+    }
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block;border-radius:14px}
+    button{font:inherit;cursor:pointer}
+    :focus-visible{outline:none;box-shadow:var(--focus);border-radius:8px}
+    .container{max-width:var(--maxw);margin-inline:auto;padding:0 20px}
+    .grid{display:grid;gap:var(--gap)}
+    .muted{color:var(--muted)}
+    h1,h2,h3{margin:0}
+
+    /* =========================================================
+       HEADER + PROGRESS BAR + NAV (NO DARK MODE)
+    ========================================================= */
+    .progress{position:fixed;inset:0 0 auto 0;height:3px;background:linear-gradient(90deg,var(--primary),var(--secondary));
+      transform-origin:0 50%;transform:scaleX(0);z-index:80;box-shadow:var(--shadow-2)}
+    header{position:sticky;top:0;z-index:70;background:rgba(255,255,255,.75);
+      backdrop-filter:blur(10px);border-bottom:1px solid var(--border);transition:box-shadow .25s ease}
+    header.scrolled{box-shadow:0 8px 24px rgba(18,6,43,.08)}
+    .nav{display:flex;align-items:center;gap:16px;padding:10px 0}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.3px}
+    .brand__logo{width:36px;height:36px;border-radius:10px;box-shadow:var(--shadow-2);position:relative;overflow:hidden}
+    .brand__logo::before{content:"";position:absolute;inset:-40% -40%;background:conic-gradient(from 0deg, var(--primary), var(--secondary), var(--accent), var(--primary));animation:spinSlow 8s linear infinite}
+    .brand__logo::after{content:"";position:absolute;inset:3px;border-radius:8px;background:var(--card);border:1px solid var(--border)}
+    @keyframes spinSlow{to{transform:rotate(360deg)}}
+
+    .nav__links{display:flex;gap:8px;flex-wrap:wrap}
+    .nav__links a{padding:8px 10px;border-radius:10px;color:var(--muted);transition:background .2s, transform .2s}
+    .nav__links a:hover{background:var(--primary-weak);color:var(--primary);transform:translateY(-1px)}
+    .nav__actions{margin-left:auto;display:flex;align-items:center;gap:8px}
+
+    .btn{background:var(--primary);color:#fff;border:0;border-radius:12px;padding:10px 14px;box-shadow:var(--shadow-2);transition:transform .08s, box-shadow .25s}
+    .btn:hover{transform:translateY(-1px);box-shadow:0 10px 22px color-mix(in oklab, var(--primary) 30%, #000 0%)}
+    .btn:active{transform:translateY(0)}
+    .btn--ghost{background:transparent;color:var(--primary);border:1px solid var(--primary-weak)}
+    .btn--subtle{background:transparent;border:1px solid var(--border);color:var(--text)}
+    .chip{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;font-size:12px;background:var(--primary-weak);color:var(--primary)}
+
+    /* Burger button (RIGHT) */
+    .burger{display:none;--size:40px;width:var(--size);height:var(--size);border-radius:10px;border:1px solid var(--border);background:var(--card);align-items:center;justify-content:center}
+    .burger span{position:relative;display:block;width:18px;height:2px;background:#3b2a66}
+    .burger span::before,.burger span::after{content:"";position:absolute;left:0;width:100%;height:2px;background:#3b2a66;transition:transform .25s ease, top .25s ease}
+    .burger span::before{top:-6px}
+    .burger span::after{top:6px}
+    .burger[aria-expanded="true"] span{background:transparent}
+    .burger[aria-expanded="true"] span::before{top:0;transform:rotate(45deg)}
+    .burger[aria-expanded="true"] span::after{top:0;transform:rotate(-45deg)}
+
+    /* Mobile drawer */
+    .drawer{position:fixed;inset:0 0 0 auto;width:min(86vw,360px);background:rgba(255,255,255,.96);
+      backdrop-filter:blur(10px);box-shadow:-10px 0 30px rgba(18,6,43,.12);transform:translateX(100%);transition:transform .3s ease;z-index:75;padding:16px}
+    .drawer.open{transform:translateX(0)}
+    .drawer a{display:block;padding:12px;border-radius:10px;color:var(--text)}
+    .drawer a:hover{background:var(--primary-weak);color:var(--primary)}
+
+    /* =========================================================
+       HERO + WAVES + BADGES
+    ========================================================= */
+    .hero{padding:72px 0 36px;position:relative;overflow:hidden}
+    .hero__wrap{display:grid;gap:18px}
+    .hero__title{font-size:clamp(28px,4.5vw,48px);line-height:1.1;font-weight:900;letter-spacing:.2px}
+    .hero__subtitle{color:var(--muted);font-size:clamp(14px,2vw,18px)}
+    .hero__cta{display:flex;gap:10px;flex-wrap:wrap}
+    .badge-float{position:absolute;right:6%;top:14%;display:grid;gap:10px}
+    .badge-float .chip{backdrop-filter:blur(6px);background:var(--glass)}
+
+    /* subtle animated waves */
+    .waves{position:absolute;inset:auto 0 0 0;height:120px;overflow:hidden;pointer-events:none}
+    .wave{position:absolute;left:0;right:0;height:120px;background:
+      radial-gradient(1200px 80px at 10% 100%, color-mix(in oklab, var(--primary) 20%, transparent), transparent 70%),
+      radial-gradient(900px 80px at 90% 100%, color-mix(in oklab, var(--secondary) 18%, transparent), transparent 70%);
+      animation:drift 8s ease-in-out infinite alternate;opacity:.6}
+    @keyframes drift{from{transform:translateY(0)}to{transform:translateY(10px)}}
+
+    /* =========================================================
+       SECTIONS, CARDS, STICKY FILTERS, SKELETONS
+    ========================================================= */
+    section{scroll-margin-top:82px;padding:40px 0}
+    .section__head{display:flex;align-items:end;justify-content:space-between;gap:10px;margin-bottom:14px}
+    h2{font-size:clamp(22px,3.2vw,32px)}
+
+    .filterbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;position:sticky;top:72px;z-index:60;background:color-mix(in oklab, var(--card) 92%, transparent);border:1px solid var(--border);padding:8px;border-radius:12px;backdrop-filter:blur(6px)}
+    .input,select{border:1px solid var(--border);background:var(--card);padding:10px 12px;border-radius:12px;min-width:160px;color:var(--text)}
+    .center{display:grid;place-items:center}.mt-12{margin-top:12px}
+
+    .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;opacity:0;transform:translateY(8px);transition:opacity .35s ease, transform .35s ease, box-shadow .25s ease}
+    .card.reveal{opacity:1;transform:none}
+    .card:hover{box-shadow:0 12px 32px rgba(18,6,43,.12)}
+
+    /* skeletons */
+    .skeleton{position:relative;overflow:hidden;background:color-mix(in oklab, var(--card) 70%, #aaa 30%);border-radius:10px}
+    .skeleton::after{content:"";position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);animation:shimmer 1.2s infinite}
+    @keyframes shimmer{to{transform:translateX(100%)}}
+    .s-card{padding:14px;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .s-line{height:14px;margin:8px 0}
+    .s-badge{height:22px;width:80px;border-radius:999px}
+
+    .price{font-weight:800}
+
+    /* =========================================================
+       FOOTER
+    ========================================================= */
+    footer{background:#0f1020;color:#e6e0ff;margin-top:24px;padding:28px 0}
+    footer a{color:#b9f3f1}
+
+    /* =========================================================
+       USER DROPDOWN + MODAL + TOASTS
+    ========================================================= */
+    .user{position:relative}
+    .user__btn{display:flex;align-items:center;gap:8px;background:transparent;border:1px solid var(--border);color:var(--text);border-radius:999px;padding:6px 10px}
+    .user__menu{position:absolute;right:0;top:calc(100% + 8px);background:var(--card);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);padding:8px;display:none;min-width:180px}
+    .user[open] .user__menu{display:block}
+    .menu__item{display:block;padding:8px 10px;border-radius:8px;background:transparent;border:0;width:100%;text-align:left;color:var(--text)}
+    .menu__item:hover{background:color-mix(in oklab, var(--primary-weak) 60%, transparent)}
+
+    .modal{position:fixed;inset:0;display:none;place-items:center;background:rgba(15,9,34,.42);z-index:90}
+    .modal[open]{display:grid}
+    .modal__dialog{width:min(420px,92vw);background:var(--card);border-radius:18px;box-shadow:var(--shadow);padding:16px;animation:pop .2s ease;border:1px solid var(--border)}
+    .modal__title{margin:0 0 8px 0;font-size:22px}
+    .form{display:grid;gap:10px}.row{display:grid;gap:10px}
+    .error{color:var(--danger);font-size:13px;display:none}.error[show]{display:block}
+    .spinner{width:18px;height:18px;border:2px solid #ddd;border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite;display:none}
+    .spinner[show]{display:inline-block}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @keyframes pop{from{transform:scale(.98);opacity:0}to{transform:scale(1);opacity:1}}
+
+    /* Toast */
+    .toast{position:fixed;right:16px;bottom:16px;display:grid;gap:8px;z-index:95}
+    .toast__item{background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow);padding:10px 12px;border-radius:12px;animation:slideIn .25s ease}
+    @keyframes slideIn{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
+
+    /* Back to top */
+    .totop{position:fixed;right:16px;bottom:20px;z-index:85;display:none}
+    .totop.show{display:block}
+
+    /* =========================================================
+       EXTRA BLOCKS: REVIEWS & FAQ
+    ========================================================= */
+    .reviews{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+    .review{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow)}
+    .review__head{display:flex;align-items:center;gap:10px}
+    .review__avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary))}
+    .stars{letter-spacing:2px}
+
+    details.faq{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 12px}
+    details.faq+details.faq{margin-top:10px}
+    details.faq[open]{box-shadow:var(--shadow)}
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
+    @media (max-width: 980px){
+      .nav__links{display:none}
+      .burger{display:flex}
+    }
+    @media (max-width: 560px){
+      .hero{padding:54px 0 24px}
+      .hero__title{font-size:clamp(24px,7vw,32px)}
+      .hero__cta{display:grid;grid-template-columns:1fr;gap:8px}
+      .btn,.btn--ghost,.btn--subtle{width:100%}
+      .cards{grid-template-columns:1fr}
+      .filterbar{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px}
+      .filterbar > *{flex:0 0 auto}
+      .container{padding:0 12px}
+    }
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important;transition:none!important}
+    }
+    /* Mobile drawer scroll lock */
+    body.noscroll{overflow:hidden}
+  </style>
+</head>
+<body>
+  <div class="progress" id="progress"></div>
+
+  <header>
+    <div class="container nav" role="navigation" aria-label="Главная навигация">
+      <div class="brand" aria-label="#мамаможет">
+        <div class="brand__logo" aria-hidden="true"></div>
+        <div>Мама может <span class="muted">#мамаможет</span></div>
+      </div>
+
+      <nav class="nav__links" aria-label="Секции">
+        <a href="#courses">Курсы</a>
+        <a href="#market">Маркетплейс</a>
+        <a href="#jobs">Вакансии</a>
+        <a href="#grants">Гранты</a>
+        <a href="#support">Помощь</a>
+        <a href="#about">О проекте</a>
+      </nav>
+
+      <div class="nav__actions">
+        <button class="btn btn--ghost" id="btn-login">Войти</button>
+        <button class="btn" id="btn-join" onclick="document.querySelector('[href=\'#courses\']').click()">Присоединиться</button>
+        <details class="user" id="user-area" style="display:none">
+          <summary class="user__btn"><span id="user-login"></span><span class="chip" id="user-role"></span></summary>
+          <div class="user__menu">
+            <a class="menu__item" href="#profile">Профиль</a>
+            <button class="menu__item" id="btn-logout">Выйти</button>
+          </div>
+        </details>
+        <!-- Burger stays on the RIGHT -->
+        <button class="burger" id="burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="drawer"><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile drawer -->
+  <aside class="drawer" id="drawer" aria-hidden="true">
+    <nav>
+      <a href="#courses">Курсы</a>
+      <a href="#market">Маркетплейс</a>
+      <a href="#jobs">Вакансии</a>
+      <a href="#grants">Гранты</a>
+      <a href="#support">Помощь</a>
+      <a href="#about">О проекте</a>
+    </nav>
+  </aside>
+
+  <main>
+    <section class="hero container" id="home">
+      <div class="hero__wrap">
+        <h1 class="hero__title">МАМА ҚОЛЫНАН БӘРІ КЕЛЕДІ — ЕГЕР ЖАНЫНДА СЕНЕТІНДЕР БОЛСА…</h1>
+        <p class="hero__subtitle">Социально‑деловая онлайн‑платформа для мам: обучение, удалённая работа, поддержка и сообщество.</p>
+        <div class="hero__cta">
+          <a class="btn" href="#courses">Курсы</a>
+          <a class="btn btn--ghost" href="#market">Маркетплейс</a>
+          <a class="btn btn--ghost" href="#jobs">Вакансии</a>
+        </div>
+        <div class="badge-float" aria-hidden="true">
+          <span class="chip">🎓 Обучение</span>
+          <span class="chip">💼 Работа</span>
+          <span class="chip">🤝 Поддержка</span>
+        </div>
+        <div class="waves"><div class="wave"></div></div>
+      </div>
+    </section>
+
+    <!-- Быстрые метрики -->
+    <section id="stats">
+      <div class="container">
+        <div class="cards">
+          <article class="card reveal"><h3>5000+</h3><div class="muted">участниц сообщества</div></article>
+          <article class="card reveal"><h3>120+</h3><div class="muted">активных вакансий</div></article>
+          <article class="card reveal"><h3>60+</h3><div class="muted">грантов и программ</div></article>
+          <article class="card reveal"><h3>30+</h3><div class="muted">курсов и мастер‑классов</div></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- КУРСЫ -->
+    <section id="courses">
+      <div class="container">
+        <div class="section__head">
+          <h2>Курстар</h2>
+          <div class="muted" id="courses-count">0</div>
+        </div>
+        <div class="filterbar">
+          <input class="input" id="course-search" placeholder="Іздеу" />
+          <select id="course-tag"></select>
+          <select id="course-sort">
+            <option value="rating">Рейтинг бойынша</option>
+            <option value="price">Баға бойынша</option>
+            <option value="duration">Ұзақтығы бойынша</option>
+          </select>
+          <button class="btn btn--subtle" id="course-dir" aria-pressed="false" title="Направление сортировки">↑</button>
+        </div>
+        <div class="cards" id="courses-list"></div>
+        <div class="center mt-12"><button class="btn btn--ghost" id="courses-more">Тағы көрсету</button></div>
+      </div>
+    </section>
+
+    <!-- МАРКЕТ -->
+    <section id="market">
+      <div class="container">
+        <div class="section__head">
+          <h2>Маркетплейс</h2>
+          <div class="muted" id="market-count">0</div>
+        </div>
+        <div class="filterbar">
+          <input class="input" id="market-search" placeholder="Іздеу" />
+          <select id="market-type"></select>
+          <select id="market-sort">
+            <option value="price">Баға бойынша</option>
+            <option value="title">Атауы бойынша</option>
+          </select>
+          <button class="btn btn--subtle" id="market-dir" aria-pressed="false">↑</button>
+          <button class="btn" id="market-add">Хабарландыру қосу</button>
+        </div>
+        <div class="cards" id="market-list"></div>
+        <div class="center mt-12"><button class="btn btn--ghost" id="market-more">Тағы көрсету</button></div>
+      </div>
+    </section>
+
+    <!-- ВАКАНСИИ -->
+    <section id="jobs">
+      <div class="container">
+        <div class="section__head">
+          <h2>Вакансии / Биржа</h2>
+          <div class="muted" id="jobs-count">0</div>
+        </div>
+        <div class="filterbar">
+          <input class="input" id="jobs-search" placeholder="Поиск" />
+          <select id="jobs-sort">
+            <option value="deadline">По дедлайну</option>
+            <option value="sum">По оплате</option>
+            <option value="title">По названию</option>
+          </select>
+          <button class="btn btn--subtle" id="jobs-dir" aria-pressed="false">↑</button>
+        </div>
+        <div class="cards" id="jobs-list"></div>
+        <div class="center mt-12"><button class="btn btn--ghost" id="jobs-more">Показать ещё</button></div>
+      </div>
+    </section>
+
+    <!-- ГРАНТЫ -->
+    <section id="grants">
+      <div class="container">
+        <div class="section__head">
+          <h2>Гранттар</h2>
+          <div class="muted" id="grants-count">0</div>
+        </div>
+        <div class="filterbar">
+          <input class="input" id="grants-search" placeholder="Іздеу" />
+          <select id="grants-sort">
+            <option value="deadline">Дедлайн бойынша</option>
+            <option value="sum" selected>Сома бойынша</option>
+            <option value="title">Атауы бойынша</option>
+          </select>
+          <button class="btn btn--subtle" id="grants-dir" aria-pressed="false">↑</button>
+        </div>
+        <div class="cards" id="grants-list"></div>
+        <div class="center mt-12"><button class="btn btn--ghost" id="grants-more">Тағы көрсету</button></div>
+      </div>
+    </section>
+
+    <!-- ПОДДЕРЖКА -->
+    <section id="support">
+      <div class="container">
+        <div class="section__head"><h2>Көмек</h2></div>
+        <div class="cards" id="support-list"></div>
+      </div>
+    </section>
+
+    <!-- ОТЗЫВЫ -->
+    <section id="reviews">
+      <div class="container">
+        <div class="section__head"><h2>Отзывы</h2></div>
+        <div class="reviews">
+          <article class="review">
+            <div class="review__head">
+              <div class="review__avatar" aria-hidden="true"></div>
+              <div><strong>Айгерим</strong><div class="muted">Алматы</div></div>
+            </div>
+            <div class="muted stars" aria-label="Рейтинг: 5 из 5">★★★★★</div>
+            <p>Нашла первую удалённую работу через платформу. Удобно и быстро!</p>
+          </article>
+          <article class="review">
+            <div class="review__head">
+              <div class="review__avatar" aria-hidden="true"></div>
+              <div><strong>Марина</strong><div class="muted">Шымкент</div></div>
+            </div>
+            <div class="muted stars" aria-label="Рейтинг: 5 из 5">★★★★★</div>
+            <p>Курсы по маркетингу оказались очень практичными. Спасибо команде!</p>
+          </article>
+          <article class="review">
+            <div class="review__head">
+              <div class="review__avatar" aria-hidden="true"></div>
+              <div><strong>Динара</strong><div class="muted">Астана</div></div>
+            </div>
+            <div class="muted stars" aria-label="Рейтинг: 4 из 5">★★★★☆</div>
+            <p>Грантов много и фильтры работают отлично — быстро нашла подходящее.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq">
+      <div class="container">
+        <div class="section__head"><h2>FAQ</h2></div>
+        <details class="faq">
+          <summary><strong>Как подать заявку на грант?</strong></summary>
+          <p class="muted">Откройте раздел «Гранттар», отфильтруйте по сумме/дедлайну и нажмите «Подать» на карточке.</p>
+        </details>
+        <details class="faq">
+          <summary><strong>Нужна ли регистрация для отклика на вакансию?</strong></summary>
+          <p class="muted">Да, авторизуйтесь через «Войти» — после этого кнопка «Откликнуться» отправит заявку.</p>
+        </details>
+        <details class="faq">
+          <summary><strong>Откуда данные?</strong></summary>
+          <p class="muted">Все данные подтягиваются из Google Sheets и обновляются при каждом заходе.</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- О ПРОЕКТЕ -->
+    <section id="about">
+      <div class="container">
+        <div class="section__head"><h2>О проекте</h2></div>
+        <div class="cards">
+          <article class="card reveal">
+            <h3>Миссия</h3>
+            <div class="muted">Дать мамам доступ к качественному обучению, удалённой работе и поддерживающему сообществу.</div>
+          </article>
+          <article class="card reveal">
+            <h3>Ценности</h3>
+            <div class="muted">Безопасность, уважение, рост, инклюзивность, взаимопомощь.</div>
+          </article>
+          <article class="card reveal">
+            <h3>Как это работает</h3>
+            <div class="muted">Выбирайте курсы, публикуйте товары и услуги в маркетплейсе, откликайтесь на вакансии и гранты.</div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <strong>Мама может</strong> · <span>#мамаможет</span>
+      <div class="muted">Email: mamamojet@gmail.com · Tel: +7 775 388 2202</div>
+    </div>
+  </footer>
+
+  <!-- LOGIN MODAL -->
+  <dialog class="modal" id="modal-login" aria-labelledby="login-title" aria-modal="true">
+    <div class="modal__dialog">
+      <h3 class="modal__title" id="login-title">Вход</h3>
+      <form class="form" id="login-form">
+        <div class="row">
+          <input class="input" name="login" id="login-phone" inputmode="tel" placeholder="Телефон (без +)" autocomplete="username" required />
+          <input class="input" name="pass" id="login-pass" type="password" placeholder="Пароль" autocomplete="current-password" required />
+        </div>
+        <div class="error" id="login-error">Неверный логин или пароль</div>
+        <div style="display:flex;justify-content:flex-end;gap:8px">
+          <button type="button" class="btn btn--ghost" data-close>Отмена</button>
+          <button type="submit" class="btn"><span class="spinner" id="login-spin"></span><span>Войти</span></button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- TOASTS & TO-TOP -->
+  <div class="toast" id="toast" aria-live="polite" aria-atomic="true"></div>
+  <button class="btn totop" id="totop" title="Наверх">↑</button>
+
+  <script>
+    /* ===================== CONFIG ===================== */
+    const CONFIG = {
+      spreadsheetId: '1najoTh6IacXwU_se-9de-KMlZ7XQ5F64d0P1rdlMXTQ',
+      sheets: { users:'Юзеры', courses:'Курсы', market:'Маркетплейс', jobs:'Вакансии', grants:'Гранты', support:'Поддержка' }
+    };
+
+    /* UTILITIES */
+    const $ = sel => document.querySelector(sel);
+    const $$ = sel => [...document.querySelectorAll(sel)];
+    const app = { users:[], data:{courses:[], market:[], jobs:[], grants:[], support:[]}, user:null, pagers:{} };
+
+    function toast(msg, timeout=2200){
+      const box = $('#toast'); const el = document.createElement('div');
+      el.className = 'toast__item'; el.textContent = msg; box.appendChild(el);
+      setTimeout(()=>{ el.style.opacity='0'; el.style.transform='translateY(6px)'; setTimeout(()=>el.remove(),220); }, timeout);
+    }
+
+    function unique(arr){ return [...new Set(arr.filter(Boolean))]; }
+    function fillSelectOptions(selectEl, values, firstLabel='Барлығы'){
+      if(!selectEl) return;
+      const opts = [`<option value="">${firstLabel}</option>`].concat(values.map(v => `<option value="${v}">${v}</option>`));
+      selectEl.innerHTML = opts.join('');
+    }
+    function toggleDir(btn){
+      const now = btn.getAttribute('aria-pressed')==='true';
+      btn.setAttribute('aria-pressed', String(!now));
+      btn.textContent = !now ? '↓' : '↑';
+    }
+
+    /* Smooth anchor scroll & drawer close */
+    document.addEventListener('click', (e)=>{
+      const a = e.target.closest('a[href^="#"]');
+      if(!a) return;
+      const id = a.getAttribute('href');
+      const el = document.querySelector(id);
+      if(el){ e.preventDefault(); el.scrollIntoView({behavior:'smooth', block:'start'}); closeDrawer(); }
+    });
+
+    /* Header shadow on scroll + progress + toTop */
+    const header = document.querySelector('header');
+    const progress = $('#progress');
+    const totop = $('#totop');
+    function onScroll(){
+      const y = window.scrollY;
+      header.classList.toggle('scrolled', y>10);
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      const p = h>0 ? (y / h) : 0; progress.style.transform = `scaleX(${p})`;
+      totop.classList.toggle('show', y>500);
+    }
+    document.addEventListener('scroll', onScroll);
+    totop.addEventListener('click', ()=> window.scrollTo({top:0,behavior:'smooth'}));
+
+    /* Burger & drawer */
+    const burger = document.getElementById('burger');
+    const drawer = document.getElementById('drawer');
+    function openDrawer(){drawer.classList.add('open');drawer.setAttribute('aria-hidden','false');burger.setAttribute('aria-expanded','true');document.body.classList.add('noscroll');}
+    function closeDrawer(){drawer.classList.remove('open');drawer.setAttribute('aria-hidden','true');burger.setAttribute('aria-expanded','false');document.body.classList.remove('noscroll');}
+    burger.addEventListener('click', ()=>{ drawer.classList.contains('open') ? closeDrawer() : openDrawer(); });
+    drawer.addEventListener('click', (e)=>{ if(e.target.matches('a')) closeDrawer(); });
+
+    /* Reveal on scroll for cards */
+    const revealIO = new IntersectionObserver((entries)=>{
+      entries.forEach(ent=>{ if(ent.isIntersecting){ ent.target.classList.add('reveal'); revealIO.unobserve(ent.target); } });
+    },{threshold:.12});
+
+    /* Fetch from Google Sheets */
+    async function fetchSheet(sheet){
+      const url = `https://docs.google.com/spreadsheets/d/${CONFIG.spreadsheetId}/gviz/tq?sheet=${encodeURIComponent(sheet)}&tqx=out:json`;
+      const res = await fetch(url,{cache:'no-store'});
+      const txt = await res.text();
+      const json = JSON.parse(txt.slice(txt.indexOf('{'), txt.lastIndexOf('}')+1));
+      const cols = json.table.cols.map(c => (c.label||'').trim());
+      return json.table.rows.map(r=>{
+        const row={}; r.c?.forEach((cell,i)=> row[cols[i]] = cell && cell.v!=null ? String(cell.v).trim() : '');
+        return row;
+      });
+    }
+
+    /* ===================== AUTH (same logic + UX) ===================== */
+    const modalLogin = document.getElementById('modal-login');
+    const btnLogin = document.getElementById('btn-login');
+    const userArea = document.getElementById('user-area');
+    const userLogin = document.getElementById('user-login');
+    const userRole  = document.getElementById('user-role');
+
+    function openModal(m){ m.showModal(); }
+    function closeModal(m){ m.close(); }
+
+    btnLogin.addEventListener('click', ()=> openModal(modalLogin));
+    modalLogin.addEventListener('click', e=> { if(e.target.hasAttribute('data-close') || e.target===modalLogin) closeModal(modalLogin); });
+
+    function phoneMask(value){ return value.replace(/\D/g,'').slice(0,12); }
+
+    async function initAuth(){
+      app.users = await fetchSheet(CONFIG.sheets.users);
+      const saved = localStorage.getItem('mm_user');
+      if(saved){ app.user = JSON.parse(saved); showUser(); }
+    }
+
+    function showUser(){
+      if(!app.user){
+        btnLogin.style.display='';
+        document.getElementById('btn-join').style.display='';
+        userArea.style.display='none';
+        return;
+      }
+      btnLogin.style.display='none';
+      document.getElementById('btn-join').style.display='none'; // скрываем после логина
+      userArea.style.display='block';
+      userLogin.textContent = app.user.login;
+      userRole.textContent = app.user.role || '';
+      toast('Добро пожаловать!');
+    }
+
+    document.getElementById('btn-logout').addEventListener('click', ()=>{
+      app.user=null; localStorage.removeItem('mm_user'); showUser(); toast('Вы вышли из аккаунта');
+    });
+
+    document.getElementById('login-form').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const spin = document.getElementById('login-spin');
+      const err = document.getElementById('login-error');
+      err.removeAttribute('show'); spin.setAttribute('show','');
+
+      const login = phoneMask(document.getElementById('login-phone').value);
+      const pass  = document.getElementById('login-pass').value;
+
+      setTimeout(()=>{
+        const u = app.users.find(x => x['Логин']===login && x['Пароль']===pass);
+        spin.removeAttribute('show');
+        if(!u){ err.setAttribute('show',''); return; }
+        app.user = {login, role: u['Роль']||''};
+        localStorage.setItem('mm_user', JSON.stringify(app.user));
+        showUser(); closeModal(modalLogin);
+      }, 400);
+    });
+
+    /* ===================== SKELETON HELPERS ===================== */
+    function skeletonCards(containerId, count=6){
+      const list = document.getElementById(containerId);
+      list.innerHTML = '';
+      for(let i=0;i<count;i++){
+        const el = document.createElement('article');
+        el.className='s-card';
+        el.innerHTML = `
+          <div class="skeleton s-badge"></div>
+          <div class="skeleton s-line" style="width:70%"></div>
+          <div class="skeleton s-line" style="width:40%"></div>
+          <div class="skeleton s-line" style="width:55%"></div>`;
+        list.appendChild(el);
+      }
+    }
+
+    /* ===================== COURSES ===================== */
+    async function loadCourses(){
+      skeletonCards('courses-list', 6);
+      const rows = await fetchSheet(CONFIG.sheets.courses);
+      app.data.courses = rows.map(r=>({
+        id: crypto.randomUUID(),
+        tag: r['категория']||'',
+        title: r['название']||'',
+        duration: Number(r['длительность']||0),
+        price: Number(r['стоимость']||0),
+        rating: Number(r['рейтинг']||0),
+        more: r['подробнее']||''
+      }));
+
+      const catValues = unique(app.data.courses.map(c=>c.tag));
+      fillSelectOptions(document.getElementById('course-tag'), catValues, 'Барлығы');
+
+      renderCourses();
+    }
+    function renderCourses(){
+      const q = (document.getElementById('course-search').value||'').toLowerCase();
+      const tag = document.getElementById('course-tag').value||'';
+      const sortKey = document.getElementById('course-sort').value;
+      const desc = document.getElementById('course-dir').getAttribute('aria-pressed')==='true';
+
+      let arr = app.data.courses.filter(c => (!tag || c.tag===tag) && (!q || c.title.toLowerCase().includes(q)));
+      arr.sort((a,b)=>{
+        const v = sortKey==='rating' ? (a.rating-b.rating)
+                : sortKey==='price' ? (a.price-b.price)
+                : (a.duration-b.duration);
+        return desc ? -v : v;
+      });
+
+      document.getElementById('courses-count').textContent = String(arr.length);
+      const list = document.getElementById('courses-list'); list.innerHTML='';
+      arr.forEach(c=>{
+        const el = document.createElement('article');
+        el.className='card';
+        el.innerHTML = `
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+            <div class="chip">${c.tag||'—'}</div>
+            <div class="muted" title="Рейтинг">✨ ${c.rating||0}</div>
+          </div>
+          <h3>${c.title}</h3>
+          <div class="muted">${c.duration||0} нед.</div>
+          <div class="price">${c.price? new Intl.NumberFormat('ru-RU').format(c.price)+' ₸':'Бесплатно'}</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn btn--ghost">Подробнее</button>
+            <button class="btn btn--subtle">В избранное</button>
+          </div>`;
+        el.querySelector('.btn').addEventListener('click', ()=>{
+          if(!app.user){ openModal(modalLogin); return; }
+          alert(c.more || 'Информация появится позже');
+        });
+        el.querySelector('.btn--subtle').addEventListener('click', ()=> toast('Добавлено в избранное'));
+        list.appendChild(el); revealIO.observe(el);
+      });
+    }
+    document.getElementById('course-dir').addEventListener('click', e=>{ toggleDir(e.currentTarget); renderCourses(); });
+    ['course-search','course-tag','course-sort'].forEach(id=> document.getElementById(id).addEventListener('input', renderCourses));
+    document.getElementById('courses-more').addEventListener('click', ()=> toast('Загружены все курсы'));
+
+    /* ===================== MARKET ===================== */
+    async function loadMarket(){
+      skeletonCards('market-list', 6);
+      const rows = await fetchSheet(CONFIG.sheets.market);
+      app.data.market = rows.map(r=>({
+        id: crypto.randomUUID(),
+        type: r['категорий']||'',
+        title: r['название']||'',
+        price: Number(r['стоимость']||0),
+        seller: (r['имя/город']||'').split('/')[0]||'',
+        location: (r['имя/город']||'').split('/')[1]||'',
+        contact: r['связаться']||''
+      }));
+
+      const types = unique(app.data.market.map(m=>m.type));
+      fillSelectOptions(document.getElementById('market-type'), types, 'Барлығы');
+
+      renderMarket();
+    }
+    function renderMarket(){
+      const q = (document.getElementById('market-search').value||'').toLowerCase();
+      const type = document.getElementById('market-type').value||'';
+      const sortKey = document.getElementById('market-sort').value;
+      const desc = document.getElementById('market-dir').getAttribute('aria-pressed')==='true';
+
+      let arr = app.data.market.filter(m=> (!type || m.type===type) && (!q || m.title.toLowerCase().includes(q)));
+      arr.sort((a,b)=>{
+        let v = sortKey==='price' ? (a.price-b.price) : (''+a.title).localeCompare(b.title);
+        return desc ? -v : v;
+      });
+
+      document.getElementById('market-count').textContent = String(arr.length);
+      const list = document.getElementById('market-list'); list.innerHTML='';
+      arr.forEach(m=>{
+        const el=document.createElement('article'); el.className='card';
+        el.innerHTML = `
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+            <div class="chip">${m.type||'—'}</div>
+            <div class="muted">${[m.seller,m.location].filter(Boolean).join(' · ')}</div>
+          </div>
+          <h3>${m.title}</h3>
+          <div class="price">${new Intl.NumberFormat('ru-RU').format(m.price)} ₸</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn btn--ghost">Связаться</button>
+            <button class="btn btn--subtle">Сохранить</button>
+          </div>`;
+        el.querySelector('.btn').addEventListener('click', ()=>{
+          if(!m.contact){ alert('Контакт не указан'); return; }
+          if(m.contact.startsWith('@')) location.href = 'https://t.me/'+m.contact.slice(1);
+          else if(m.contact.replace(/\D/g,'').length>=10) location.href = 'https://wa.me/'+m.contact.replace(/\D/g,'');
+          else location.href = m.contact;
+        });
+        el.querySelector('.btn--subtle').addEventListener('click', ()=> toast('Сохранено'));
+        list.appendChild(el); revealIO.observe(el);
+      });
+    }
+    document.getElementById('market-dir').addEventListener('click', e=>{ toggleDir(e.currentTarget); renderMarket(); });
+    ['market-search','market-type','market-sort'].forEach(id=> document.getElementById(id).addEventListener('input', renderMarket));
+    document.getElementById('market-more').addEventListener('click', ()=> toast('Загружены все объявления'));
+    document.getElementById('market-add').addEventListener('click', ()=> toast('Форма добавления появится позже'));
+
+    /* ===================== JOBS ===================== */
+    async function loadJobs(){
+      skeletonCards('jobs-list', 6);
+      const rows = await fetchSheet(CONFIG.sheets.jobs);
+      app.data.jobs = rows.map(r=>({
+        id: crypto.randomUUID(),
+        cat: r['категория']||'',
+        title: r['название']||'',
+        company: r['компания']||'',
+        deadline: r['дедлайн']||'',
+        sum: Number(r['сумма']||0)
+      }));
+      renderJobs();
+    }
+    function renderJobs(){
+      const q=(document.getElementById('jobs-search').value||'').toLowerCase();
+      const sortKey=document.getElementById('jobs-sort').value;
+      const desc=document.getElementById('jobs-dir').getAttribute('aria-pressed')==='true';
+
+      let arr = app.data.jobs.filter(j=> (!q || j.title.toLowerCase().includes(q) || j.company.toLowerCase().includes(q)));
+      arr.sort((a,b)=>{
+        let v = 0;
+        if(sortKey==='deadline') v = new Date(a.deadline)-new Date(b.deadline);
+        else if(sortKey==='sum') v = a.sum-b.sum;
+        else v = (''+a.title).localeCompare(b.title);
+        return desc ? -v : v;
+      });
+
+      document.getElementById('jobs-count').textContent=String(arr.length);
+      const list=document.getElementById('jobs-list'); list.innerHTML='';
+      arr.forEach(j=>{
+        const el=document.createElement('article'); el.className='card';
+        el.innerHTML=`
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+            <div class="chip">${j.cat||'—'}</div>
+            <div class="muted">Дедлайн: ${j.deadline||'—'}</div>
+          </div>
+          <h3>${j.title}</h3>
+          <div class="muted">${j.company||'—'}</div>
+          <div class="price">${j.sum? new Intl.NumberFormat('ru-RU').format(j.sum)+' ₸':'—'}</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn btn--ghost">Откликнуться</button>
+            <button class="btn btn--subtle">Сохранить</button>
+          </div>`;
+        el.querySelector('.btn').addEventListener('click', ()=>{
+          if(!app.user){ openModal(modalLogin); return; }
+          toast('Отклик отправлен (демо)');
+        });
+        el.querySelector('.btn--subtle').addEventListener('click', ()=> toast('Сохранено'));
+        list.appendChild(el); revealIO.observe(el);
+      });
+    }
+    document.getElementById('jobs-dir').addEventListener('click', e=>{ toggleDir(e.currentTarget); renderJobs(); });
+    ['jobs-search','jobs-sort'].forEach(id=> document.getElementById(id).addEventListener('input', renderJobs));
+    document.getElementById('jobs-more').addEventListener('click', ()=> toast('Загружены все вакансии'));
+
+    /* ===================== GRANTS ===================== */
+    async function loadGrants(){
+      skeletonCards('grants-list', 6);
+      const rows = await fetchSheet(CONFIG.sheets.grants);
+      app.data.grants = rows.map(r=>({
+        id: crypto.randomUUID(),
+        title: r['название']||'',
+        company: r['компания']||'',
+        sum: Number(r['сумма']||0),
+        deadline: r['дедлайн']||'',
+        req: r['требования']||''
+      }));
+
+      document.getElementById('grants-sort').value = 'sum';
+      renderGrants();
+    }
+    function renderGrants(){
+      const q=(document.getElementById('grants-search').value||'').toLowerCase();
+      const sortKey=document.getElementById('grants-sort').value;
+      const desc=document.getElementById('grants-dir').getAttribute('aria-pressed')==='true';
+
+      let arr = app.data.grants.filter(g=> (!q || g.title.toLowerCase().includes(q) || g.company.toLowerCase().includes(q)));
+      arr.sort((a,b)=>{
+        let v=0;
+        if(sortKey==='deadline') v = new Date(a.deadline)-new Date(b.deadline);
+        else if(sortKey==='sum') v = a.sum-b.sum;
+        else v = (''+a.title).localeCompare(b.title);
+        return desc ? -v : v;
+      });
+
+      document.getElementById('grants-count').textContent=String(arr.length);
+      const list=document.getElementById('grants-list'); list.innerHTML='';
+      arr.forEach(g=>{
+        const el=document.createElement('article'); el.className='card';
+        el.innerHTML=`
+          <h3>${g.title}</h3>
+          <div class="muted">${g.company||'—'}</div>
+          <div class="price">${g.sum? new Intl.NumberFormat('ru-RU').format(g.sum)+' ₸':'—'}</div>
+          <div class="muted">Дедлайн: ${g.deadline||'—'}</div>
+          <div class="muted">${g.req||''}</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn btn--ghost">Подать</button>
+            <button class="btn btn--subtle">Сохранить</button>
+          </div>`;
+        el.querySelector('.btn').addEventListener('click', ()=>{
+          if(!app.user){ openModal(modalLogin); return; }
+          toast('Заявка отправлена (демо)');
+        });
+        el.querySelector('.btn--subtle').addEventListener('click', ()=> toast('Сохранено'));
+        list.appendChild(el); revealIO.observe(el);
+      });
+    }
+    document.getElementById('grants-dir').addEventListener('click', e=>{ toggleDir(e.currentTarget); renderGrants(); });
+    ['grants-search','grants-sort'].forEach(id=> document.getElementById(id).addEventListener('input', renderGrants));
+    document.getElementById('grants-more').addEventListener('click', ()=> toast('Загружены все гранты'));
+
+    /* ===================== SUPPORT ===================== */
+    async function loadSupport(){
+      skeletonCards('support-list', 4);
+      const rows = await fetchSheet(CONFIG.sheets.support);
+      app.data.support = rows.map(r=>({
+        expert: r['эксперт']||'',
+        desc: r['описание']||'',
+        contact: r['связаться']||''
+      }));
+      const list=document.getElementById('support-list'); list.innerHTML='';
+      app.data.support.forEach(s=>{
+        const el=document.createElement('article'); el.className='card';
+        el.innerHTML=`<div class="chip">${s.expert||'—'}</div><div class="muted">${s.desc||''}</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+            <button class="btn btn--ghost">Связаться</button>
+          </div>`;
+        el.querySelector('button').addEventListener('click', ()=>{
+          if(s.contact.startsWith('@')) location.href='https://t.me/'+s.contact.slice(1);
+          else if(s.contact.replace(/\D/g,'').length>=10) location.href='https://wa.me/'+s.contact.replace(/\D/g,'');
+          else if(s.contact) location.href=s.contact;
+        });
+        list.appendChild(el); revealIO.observe(el);
+      });
+    }
+
+    /* DIR buttons */
+    document.getElementById('market-dir').addEventListener('click', e=>{ toggleDir(e.currentTarget); renderMarket(); });
+    document.getElementById('jobs-dir').addEventListener('click', e=>{ toggleDir(e.currentTarget); renderJobs(); });
+    document.getElementById('grants-dir').addEventListener('click', e=>{ toggleDir(e.currentTarget); renderGrants(); });
+
+    /* INIT */
+    (async function init(){
+      onScroll(); // set initial progress/toTop
+      // initial skeletons
+      skeletonCards('courses-list', 6);
+      skeletonCards('market-list', 6);
+      skeletonCards('jobs-list', 6);
+      skeletonCards('grants-list', 6);
+      skeletonCards('support-list', 4);
+
+      await initAuth();
+      await Promise.all([loadCourses(), loadMarket(), loadJobs(), loadGrants(), loadSupport()]);
+    })();
+  </script>
+</body>
+</html>
