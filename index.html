@@ -4,256 +4,1299 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Мама может — социальная платформа #мамаможет</title>
-  <meta name="color-scheme" content="light" />
   <style>
     /* =========================================================
-       THEME & RESET (LIGHT ONLY)
+       THEME & RESET
     ========================================================= */
-    :root{
-      --bg:#fcfbfe;--bg-weak:#f6f5fc;--text:#1f1534;--muted:#6d6385;
-      --primary:#7a3cff;--primary-weak:#ede6ff;--secondary:#16c7c3;--secondary-weak:#dff7f6;
-      --accent:#ff7ab6;
-      --card:#fff;--border:#eceafd;--radius:16px;--gap:16px;--maxw:1200px;
-      --shadow:0 12px 30px rgba(18,6,43,.06);--shadow-2:0 6px 18px rgba(18,6,43,.06);
-      --focus:0 0 0 3px rgba(122,60,255,.15);
-      --glass:rgba(255,255,255,.7);
-      --success:#22c55e;--danger:#e54848;--warning:#f5a524;
+    :root {
+      --bg: #fcfbfe;
+      --bg-weak: #f6f5fc;
+      --text: #1f1534;
+      --muted: #6d6385;
+      --primary: #7a3cff;
+      --primary-weak: #ede6ff;
+      --secondary: #16c7c3;
+      --secondary-weak: #dff7f6;
+      --accent: #ff7ab6;
+      --card: #fff;
+      --radius: 16px;
+      --shadow: 0 12px 30px rgba(18,6,43,.06);
+      --shadow-2: 0 6px 18px rgba(18,6,43,.06);
+      --focus: 0 0 0 3px rgba(122,60,255,.15);
+      --gap: 16px;
+      --maxw: 1200px;
+      --glass: rgba(255,255,255,.7);
+      --header-height: 70px;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto;
-      color:var(--text);
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      color: var(--text);
       background:
-        radial-gradient(1200px 600px at 10% -10%, color-mix(in oklab, var(--primary) 12%, transparent) 0%, transparent 60%),
-        radial-gradient(1000px 500px at 110% 10%, color-mix(in oklab, var(--secondary) 10%, transparent) 0%, transparent 50%),
-        linear-gradient(180deg,var(--bg) 0%, color-mix(in oklab, var(--bg) 80%, #fff) 100%);
+        radial-gradient(1200px 600px at 10% -10%, #f3ecff, transparent 60%),
+        radial-gradient(1000px 500px at 110% 10%, #e9fbfb, transparent 50%),
+        linear-gradient(180deg, var(--bg) 0%, #fff 100%);
       background-attachment: fixed;
+      line-height: 1.5;
     }
-    a{color:inherit;text-decoration:none}
-    img{max-width:100%;display:block;border-radius:14px}
-    button{font:inherit;cursor:pointer}
-    :focus-visible{outline:none;box-shadow:var(--focus);border-radius:8px}
-    .container{max-width:var(--maxw);margin-inline:auto;padding:0 20px}
-    .grid{display:grid;gap:var(--gap)}
-    .muted{color:var(--muted)}
-    h1,h2,h3{margin:0}
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+      border-radius: 14px;
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    :focus-visible {
+      outline: none;
+      box-shadow: var(--focus);
+      border-radius: 8px;
+    }
+
+    .container {
+      max-width: var(--maxw);
+      margin-inline: auto;
+      padding: 0 20px;
+      width: 100%;
+    }
+
+    .grid {
+      display: grid;
+      gap: var(--gap);
+    }
+
+    .muted {
+      color: var(--muted);
+      opacity: 0.8;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    ul, ol {
+      padding-left: 1.5rem;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
 
     /* =========================================================
-       HEADER + PROGRESS BAR + NAV (NO DARK MODE)
+       VISIBILITY BY AUTH STATE
     ========================================================= */
-    .progress{position:fixed;inset:0 0 auto 0;height:3px;background:linear-gradient(90deg,var(--primary),var(--secondary));
-      transform-origin:0 50%;transform:scaleX(0);z-index:80;box-shadow:var(--shadow-2)}
-    header{position:sticky;top:0;z-index:70;background:rgba(255,255,255,.75);
-      backdrop-filter:blur(10px);border-bottom:1px solid var(--border);transition:box-shadow .25s ease}
-    header.scrolled{box-shadow:0 8px 24px rgba(18,6,43,.08)}
-    .nav{display:flex;align-items:center;gap:16px;padding:10px 0}
-    .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.3px}
-    .brand__logo{width:36px;height:36px;border-radius:10px;box-shadow:var(--shadow-2);position:relative;overflow:hidden}
-    .brand__logo::before{content:"";position:absolute;inset:-40% -40%;background:conic-gradient(from 0deg, var(--primary), var(--secondary), var(--accent), var(--primary));animation:spinSlow 8s linear infinite}
-    .brand__logo::after{content:"";position:absolute;inset:3px;border-radius:8px;background:var(--card);border:1px solid var(--border)}
-    @keyframes spinSlow{to{transform:rotate(360deg)}}
+    [data-private] {
+      display: none;
+    }
 
-    .nav__links{display:flex;gap:8px;flex-wrap:wrap}
-    .nav__links a{padding:8px 10px;border-radius:10px;color:var(--muted);transition:background .2s, transform .2s}
-    .nav__links a:hover{background:var(--primary-weak);color:var(--primary);transform:translateY(-1px)}
-    .nav__actions{margin-left:auto;display:flex;align-items:center;gap:8px}
+    body.authed [data-private] {
+      display: block;
+    }
 
-    .btn{background:var(--primary);color:#fff;border:0;border-radius:12px;padding:10px 14px;box-shadow:var(--shadow-2);transition:transform .08s, box-shadow .25s}
-    .btn:hover{transform:translateY(-1px);box-shadow:0 10px 22px color-mix(in oklab, var(--primary) 30%, #000 0%)}
-    .btn:active{transform:translateY(0)}
-    .btn--ghost{background:transparent;color:var(--primary);border:1px solid var(--primary-weak)}
-    .btn--subtle{background:transparent;border:1px solid var(--border);color:var(--text)}
-    .chip{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;font-size:12px;background:var(--primary-weak);color:var(--primary)}
+    [data-public] {
+      display: block;
+    }
 
-    /* Burger button (RIGHT) */
-    .burger{display:none;--size:40px;width:var(--size);height:var(--size);border-radius:10px;border:1px solid var(--border);background:var(--card);align-items:center;justify-content:center}
-    .burger span{position:relative;display:block;width:18px;height:2px;background:#3b2a66}
-    .burger span::before,.burger span::after{content:"";position:absolute;left:0;width:100%;height:2px;background:#3b2a66;transition:transform .25s ease, top .25s ease}
-    .burger span::before{top:-6px}
-    .burger span::after{top:6px}
-    .burger[aria-expanded="true"] span{background:transparent}
-    .burger[aria-expanded="true"] span::before{top:0;transform:rotate(45deg)}
-    .burger[aria-expanded="true"] span::after{top:0;transform:rotate(-45deg)}
-
-    /* Mobile drawer */
-    .drawer{position:fixed;inset:0 0 0 auto;width:min(86vw,360px);background:rgba(255,255,255,.96);
-      backdrop-filter:blur(10px);box-shadow:-10px 0 30px rgba(18,6,43,.12);transform:translateX(100%);transition:transform .3s ease;z-index:75;padding:16px}
-    .drawer.open{transform:translateX(0)}
-    .drawer a{display:block;padding:12px;border-radius:10px;color:var(--text)}
-    .drawer a:hover{background:var(--primary-weak);color:var(--primary)}
+    body.authed [data-public] {
+      display: none;
+    }
 
     /* =========================================================
-       HERO + WAVES + BADGES
+       HEADER + NAV (with burger)
     ========================================================= */
-    .hero{padding:72px 0 36px;position:relative;overflow:hidden}
-    .hero__wrap{display:grid;gap:18px}
-    .hero__title{font-size:clamp(28px,4.5vw,48px);line-height:1.1;font-weight:900;letter-spacing:.2px}
-    .hero__subtitle{color:var(--muted);font-size:clamp(14px,2vw,18px)}
-    .hero__cta{display:flex;gap:10px;flex-wrap:wrap}
-    .badge-float{position:absolute;right:6%;top:14%;display:grid;gap:10px}
-    .badge-float .chip{backdrop-filter:blur(6px);background:var(--glass)}
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      transition: box-shadow 0.25s ease;
+      height: var(--header-height);
+      display: flex;
+      align-items: center;
+    }
 
-    /* subtle animated waves */
-    .waves{position:absolute;inset:auto 0 0 0;height:120px;overflow:hidden;pointer-events:none}
-    .wave{position:absolute;left:0;right:0;height:120px;background:
-      radial-gradient(1200px 80px at 10% 100%, color-mix(in oklab, var(--primary) 20%, transparent), transparent 70%),
-      radial-gradient(900px 80px at 90% 100%, color-mix(in oklab, var(--secondary) 18%, transparent), transparent 70%);
-      animation:drift 8s ease-in-out infinite alternate;opacity:.6}
-    @keyframes drift{from{transform:translateY(0)}to{transform:translateY(10px)}}
+    header.scrolled {
+      box-shadow: 0 8px 24px rgba(18, 6, 43, 0.06);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .brand__logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      box-shadow: var(--shadow-2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand__logo::before {
+      content: "";
+      position: absolute;
+      inset: -40% -40%;
+      background: conic-gradient(from 0deg, var(--primary), var(--secondary), var(--accent), var(--primary));
+      animation: spinSlow 8s linear infinite;
+    }
+
+    .brand__logo::after {
+      content: "";
+      position: absolute;
+      inset: 3px;
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    @keyframes spinSlow {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .nav__links {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .nav__links a {
+      padding: 8px 12px;
+      border-radius: 10px;
+      color: var(--muted);
+      transition: background 0.2s, transform 0.2s;
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+
+    .nav__links a:hover {
+      background: var(--primary-weak);
+      color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    .nav__actions {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      background: var(--primary);
+      color: #fff;
+      border: 0;
+      border-radius: 12px;
+      padding: 10px 16px;
+      box-shadow: var(--shadow-2);
+      transition: transform 0.08s, box-shadow 0.25s, background 0.2s;
+      font-weight: 500;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(122, 60, 255, 0.18);
+      background: #6d33e6;
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn--ghost {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary-weak);
+    }
+
+    .btn--ghost:hover {
+      background: var(--primary-weak);
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      background: var(--primary-weak);
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    .burger {
+      display: none;
+      --size: 42px;
+      width: var(--size);
+      height: var(--size);
+      border-radius: 10px;
+      border: 1px solid #ece7ff;
+      background: #fff;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .burger span {
+      position: relative;
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: #3b2a66;
+      transition: transform 0.25s ease;
+    }
+
+    .burger span::before,
+    .burger span::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: #3b2a66;
+      transition: transform 0.25s ease, top 0.25s ease, opacity 0.2s;
+    }
+
+    .burger span::before {
+      top: -6px;
+    }
+
+    .burger span::after {
+      top: 6px;
+    }
+
+    .burger[aria-expanded="true"] span {
+      background: transparent;
+    }
+
+    .burger[aria-expanded="true"] span::before {
+      top: 0;
+      transform: rotate(45deg);
+    }
+
+    .burger[aria-expanded="true"] span::after {
+      top: 0;
+      transform: rotate(-45deg);
+    }
+
+    .drawer {
+      position: fixed;
+      inset: 0 0 0 auto;
+      width: min(86vw, 360px);
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      box-shadow: -10px 0 30px rgba(18, 6, 43, 0.08);
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      z-index: 200;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+    }
+
+    .drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer a {
+      display: block;
+      padding: 14px 16px;
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 1.1rem;
+    }
+
+    .drawer a:hover {
+      background: var(--primary-weak);
+      color: var(--primary);
+    }
+
+    .drawer .btn {
+      width: 100%;
+      margin-top: 10px;
+    }
+    
+    /* Добавленные стили для блока пользователя в drawer */
+    .drawer-user {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: var(--primary-weak);
+      margin-bottom: 10px;
+    }
+    
+    .drawer-user__info {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .drawer-user__name {
+      font-weight: 600;
+    }
+    
+    .drawer-user__role {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
 
     /* =========================================================
-       SECTIONS, CARDS, STICKY FILTERS, SKELETONS
+       HERO
     ========================================================= */
-    section{scroll-margin-top:82px;padding:40px 0}
-    .section__head{display:flex;align-items:end;justify-content:space-between;gap:10px;margin-bottom:14px}
-    h2{font-size:clamp(22px,3.2vw,32px)}
+    .hero {
+      padding: 80px 0 40px;
+      position: relative;
+      overflow: hidden;
+    }
 
-    .filterbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;position:sticky;top:72px;z-index:60;background:color-mix(in oklab, var(--card) 92%, transparent);border:1px solid var(--border);padding:8px;border-radius:12px;backdrop-filter:blur(6px)}
-    .input,select{border:1px solid var(--border);background:var(--card);padding:10px 12px;border-radius:12px;min-width:160px;color:var(--text)}
-    .center{display:grid;place-items:center}.mt-12{margin-top:12px}
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: -40% -10% auto -10%;
+      height: 80%;
+      background: radial-gradient(closest-side, rgba(122, 60, 255, 0.15), transparent 60%);
+      filter: blur(40px);
+      animation: float 10s ease-in-out infinite;
+      z-index: -1;
+    }
 
-    .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
-    .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;opacity:0;transform:translateY(8px);transition:opacity .35s ease, transform .35s ease, box-shadow .25s ease}
-    .card.reveal{opacity:1;transform:none}
-    .card:hover{box-shadow:0 12px 32px rgba(18,6,43,.12)}
+    .hero__wrap {
+      display: grid;
+      gap: 24px;
+      max-width: 800px;
+    }
 
-    /* skeletons */
-    .skeleton{position:relative;overflow:hidden;background:color-mix(in oklab, var(--card) 70%, #aaa 30%);border-radius:10px}
-    .skeleton::after{content:"";position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);animation:shimmer 1.2s infinite}
-    @keyframes shimmer{to{transform:translateX(100%)}}
-    .s-card{padding:14px;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
-    .s-line{height:14px;margin:8px 0}
-    .s-badge{height:22px;width:80px;border-radius:999px}
+    .hero__title {
+      font-size: clamp(32px, 4.5vw, 48px);
+      line-height: 1.1;
+      font-weight: 900;
+    }
 
-    .price{font-weight:800}
+    .hero__subtitle {
+      color: var(--muted);
+      font-size: clamp(18px, 2.2vw, 20px);
+      max-width: 700px;
+    }
+
+    .hero__cta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .badge-float {
+      position: absolute;
+      right: 6%;
+      top: 18%;
+      display: grid;
+      gap: 10px;
+      z-index: 1;
+    }
+
+    .badge-float .chip {
+      backdrop-filter: blur(6px);
+      background: var(--glass);
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(8px);
+      }
+    }
+
+    /* =========================================================
+       SECTION & CARD
+    ========================================================= */
+    section {
+      scroll-margin-top: calc(var(--header-height) + 20px);
+      padding: 60px 0;
+    }
+
+    .section__head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    h2 {
+      font-size: clamp(24px, 3.2vw, 36px);
+      font-weight: 800;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.35s ease, transform 0.35s ease, box-shadow 0.25s ease;
+    }
+
+    .card.reveal {
+      opacity: 1;
+      transform: none;
+    }
+
+    .card:hover {
+      box-shadow: 0 12px 32px rgba(18, 6, 43, 0.12);
+      transform: translateY(-5px);
+    }
+
+    .price {
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: var(--primary);
+    }
+
+    .filterbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .input, select {
+      border: 1px solid #e8e3fb;
+      background: #fff;
+      padding: 12px 16px;
+      border-radius: 12px;
+      min-width: 160px;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+    }
+
+    .input:focus, select:focus {
+      border-color: var(--primary);
+    }
+
+    .center {
+      display: grid;
+      place-items: center;
+    }
+
+    .mt-12 {
+      margin-top: 20px;
+    }
+
+    /* =========================================================
+       LOGIN DROPDOWN + MODAL
+    ========================================================= */
+    .user {
+      position: relative;
+    }
+
+    .user__btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      border: 1px solid #ece7ff;
+      color: #3b2a66;
+      border-radius: 999px;
+      padding: 8px 14px;
+      transition: background 0.2s;
+    }
+
+    .user__btn:hover {
+      background: var(--primary-weak);
+    }
+
+    .user__menu {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 8px);
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      padding: 8px;
+      display: none;
+      min-width: 200px;
+      z-index: 100;
+    }
+
+    .user[open] .user__menu {
+      display: block;
+    }
+
+    .menu__item {
+      display: block;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      transition: background 0.2s;
+    }
+
+    .menu__item:hover {
+      background: #f7f5ff;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      place-items: center;
+      background: rgba(15, 9, 34, 0.42);
+      z-index: 300;
+      padding: 20px;
+    }
+
+    .modal[open] {
+      display: flex;
+    }
+
+    .modal__dialog {
+      width: min(440px, 92vw);
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 24px;
+      animation: pop 0.2s ease;
+      width: 100%;
+
+    }
+
+    .modal__title {
+      margin: 0 0 16px 0;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .form {
+      display: grid;
+      gap: 16px;
+    }
+
+    .row {
+      display: grid;
+      gap: 12px;
+    }
+
+    .error {
+      color: #b91c1c;
+      font-size: 0.9rem;
+      display: none;
+      padding: 8px 0;
+    }
+
+    .error[show] {
+      display: block;
+    }
+
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #ddd;
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+
+    .spinner[show] {
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes pop {
+      from {
+        transform: scale(0.98);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
 
     /* =========================================================
        FOOTER
     ========================================================= */
-    footer{background:#0f1020;color:#e6e0ff;margin-top:24px;padding:28px 0}
-    footer a{color:#b9f3f1}
+    footer {
+      background: #0f1020;
+      color: #e6e0ff;
+      padding: 40px 0 20px;
+      margin-top: 40px;
+    }
 
-    /* =========================================================
-       USER DROPDOWN + MODAL + TOASTS
-    ========================================================= */
-    .user{position:relative}
-    .user__btn{display:flex;align-items:center;gap:8px;background:transparent;border:1px solid var(--border);color:var(--text);border-radius:999px;padding:6px 10px}
-    .user__menu{position:absolute;right:0;top:calc(100% + 8px);background:var(--card);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);padding:8px;display:none;min-width:180px}
-    .user[open] .user__menu{display:block}
-    .menu__item{display:block;padding:8px 10px;border-radius:8px;background:transparent;border:0;width:100%;text-align:left;color:var(--text)}
-    .menu__item:hover{background:color-mix(in oklab, var(--primary-weak) 60%, transparent)}
+    footer a {
+      color: #b9f3f1;
+      transition: opacity 0.2s;
+    }
 
-    .modal{position:fixed;inset:0;display:none;place-items:center;background:rgba(15,9,34,.42);z-index:90}
-    .modal[open]{display:grid}
-    .modal__dialog{width:min(420px,92vw);background:var(--card);border-radius:18px;box-shadow:var(--shadow);padding:16px;animation:pop .2s ease;border:1px solid var(--border)}
-    .modal__title{margin:0 0 8px 0;font-size:22px}
-    .form{display:grid;gap:10px}.row{display:grid;gap:10px}
-    .error{color:var(--danger);font-size:13px;display:none}.error[show]{display:block}
-    .spinner{width:18px;height:18px;border:2px solid #ddd;border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite;display:none}
-    .spinner[show]{display:inline-block}
-    @keyframes spin{to{transform:rotate(360deg)}}
-    @keyframes pop{from{transform:scale(.98);opacity:0}to{transform:scale(1);opacity:1}}
+    footer a:hover {
+      opacity: 0.8;
+    }
 
-    /* Toast */
-    .toast{position:fixed;right:16px;bottom:16px;display:grid;gap:8px;z-index:95}
-    .toast__item{background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow);padding:10px 12px;border-radius:12px;animation:slideIn .25s ease}
-    @keyframes slideIn{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
-
-    /* Back to top */
-    .totop{position:fixed;right:16px;bottom:20px;z-index:85;display:none}
-    .totop.show{display:block}
-
-    /* =========================================================
-       EXTRA BLOCKS: REVIEWS & FAQ
-    ========================================================= */
-    .reviews{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
-    .review{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow)}
-    .review__head{display:flex;align-items:center;gap:10px}
-    .review__avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary))}
-    .stars{letter-spacing:2px}
-
-    details.faq{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 12px}
-    details.faq+details.faq{margin-top:10px}
-    details.faq[open]{box-shadow:var(--shadow)}
+    footer .container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
 
     /* =========================================================
        RESPONSIVE
     ========================================================= */
-    @media (max-width: 980px){
-      .nav__links{display:none}
-      .burger{display:flex}
+    @media (max-width: 1024px) {
+      .cards {
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      }
     }
-    @media (max-width: 560px){
-      .hero{padding:54px 0 24px}
-      .hero__title{font-size:clamp(24px,7vw,32px)}
-      .hero__cta{display:grid;grid-template-columns:1fr;gap:8px}
-      .btn,.btn--ghost,.btn--subtle{width:100%}
-      .cards{grid-template-columns:1fr}
-      .filterbar{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px}
-      .filterbar > *{flex:0 0 auto}
-      .container{padding:0 12px}
+
+    @media (max-width: 920px) {
+      .nav__links {
+        display: none;
+      }
+      
+      .burger {
+        display: flex;
+        z-index: 201;
+      }
+      
+      .section__head {
+        flex-wrap: wrap;
+      }
+      
+      .container {
+        padding: 0 16px;
+      }
+      
+      .hero {
+        padding: 70px 0 30px;
+      }
+
+      /* Улучшенные стили для мобильных карточек */
+      .card {
+        padding: 16px;
+        gap: 12px;
+      }
+      
+      .card h3 {
+        font-size: 1.1rem;
+      }
+      
+      .card .btn {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+      }
     }
-    @media (prefers-reduced-motion: reduce){
-      *{animation:none!important;transition:none!important}
+
+    @media (max-width: 768px) {
+      section {
+        padding: 50px 0;
+      }
+      
+      .hero__title {
+        font-size: clamp(28px, 7vw, 36px);
+      }
+      
+      .hero__subtitle {
+        font-size: clamp(16px, 4vw, 18px);
+      }
+      
+      .cards {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      }
     }
-    /* Mobile drawer scroll lock */
-    body.noscroll{overflow:hidden}
+
+    @media (max-width: 560px) {
+      :root {
+        --header-height: 60px;
+        --gap: 12px;
+      }
+      
+      .nav {
+        padding: 0;
+        gap: 10px;
+      }
+      
+      .brand {
+        font-size: 1rem;
+      }
+      
+      .brand__logo {
+        width: 32px;
+        height: 32px;
+      }
+      
+      .hero {
+        padding: 60px 0 20px;
+      }
+      
+      .hero__cta {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      
+      .btn, .btn--ghost {
+        width: 100%;
+        padding: 12px;
+      }
+      
+      .cards {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      
+      .filterbar {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 10px;
+        scrollbar-width: none;
+        gap: 8px;
+      }
+      
+      .filterbar::-webkit-scrollbar {
+        display: none;
+      }
+      
+      .filterbar > * {
+        flex: 0 0 auto;
+      }
+      
+      .container {
+        padding: 0 14px;
+      }
+      
+      .section__head {
+        margin-bottom: 20px;
+      }
+      
+      .badge-float {
+        display: none;
+      }
+      
+      .user__btn {
+        padding: 6px 10px;
+        font-size: 0.9rem;
+      }
+      
+      /* Уменьшаем размеры элементов в фильтрах */
+      .input, select {
+        padding: 10px 12px;
+        min-width: 140px;
+        font-size: 0.9rem;
+      }
+      
+      .filterbar .btn {
+        padding: 10px 12px;
+        font-size: 0.85rem;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .nav__actions .btn {
+        display: none;
+      }
+      
+      .drawer .btn {
+        display: block;
+      }
+      
+      /* Дополнительные улучшения для мобильных */
+      .card {
+        padding: 14px;
+      }
+      
+      .card .price {
+        font-size: 1.1rem;
+      }
+      
+      .card .muted {
+        font-size: 0.9rem;
+      }
+    }
+
+    /* Misc */
+    body.noscroll {
+      overflow: hidden;
+    }
+
+
+    /* --- жёстко запрещаем перенос контента в шапке --- */
+.nav{display:flex;align-items:center;gap:16px;flex-wrap:nowrap}
+.brand{min-width:0}                    /* чтобы text-ellipsis работал */
+.brand__text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* фикс правой группы, чтобы ничего не давило бургер */
+.nav__actions{margin-left:auto;display:flex;align-items:center;gap:10px;min-width:0}
+
+/* предустановленная высота хедера и защита от «выпираний» */
+:root{--header-height:70px}
+header{height:var(--header-height);overflow:hidden}
+
+/* ---------- МОБИЛЬНАЯ ШАПКА: только бургер ---------- */
+@media (max-width: 920px){
+  /* скрываем любые линк‑навы (и public, и private) */
+  .nav__links{display:none !important}
+
+  /* скрываем дропдаун пользователя и кнопки входа в шапке —
+     они есть в drawer */
+  .nav__actions .btn,
+  .nav__actions details.user{display:none !important}
+
+  /* показываем бургер; он один остаётся справа */
+  .burger{display:flex}
+
+  /* делаем шапку компактнее */
+  :root{--header-height:60px}
+  header{height:var(--header-height)}
+  .nav{gap:10px}
+  .brand__logo{width:32px;height:32px}
+  /* хэштег убираем — экономим место */
+  .brand__text .muted{display:none}
+}
+
+/* сверхкомпактный режим для узких экранов */
+@media (max-width: 420px){
+  .brand__text{font-size:0.98rem}
+}
+
+
+/* ===== Modal: общие мелкие улучшения ===== */
+.modal::backdrop {                     /* нативный затемнитель для <dialog> */
+  background: rgba(15, 9, 34, 0.42);
+}
+.modal__dialog {
+  max-height: 90vh;
+  overflow: auto;
+}
+
+/* ===== Mobile bottom‑sheet версия модалки входа ===== */
+@media (max-width: 560px){
+  .modal {                             /* прижимаем к низу экрана */
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .modal__dialog {
+    width: 100vw;                      /* на всю ширину */
+    border-radius: 20px 20px 0 0;      /* как нижний лист */
+    padding: 16px 16px 12px;
+    box-shadow: 0 -16px 40px rgba(18,6,43,.18);
+    animation: sheetUp .18s ease;      /* мягкий слайд‑ап */
+  }
+
+  .modal__title {
+    font-size: 20px;
+    margin: 0 0 12px;
+  }
+
+  .row { gap: 10px; }
+  .input { padding: 14px 14px; font-size: 16px; } /* без зума на iOS */
+
+  .form__actions {                     /* кнопки в две колонки */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .form__actions .btn { width: 100%; padding: 12px; }
+
+  @keyframes sheetUp {
+    from { transform: translateY(12px); opacity: .96; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+}
+
+/* ещё чуть компактнее на очень узких */
+@media (max-width: 380px){
+  .modal__dialog { padding: 14px 14px 10px; }
+  .form__actions { gap: 8px; }
+}
+
+
+/* ---------- Drawer: скрывать/показывать по auth-состоянию ---------- */
+.drawer-auth-actions{
+  display:flex; gap:10px; flex-direction:column; margin-top:10px;
+}
+/* когда пользователь авторизован — всё public в drawer скрываем */
+body.authed .drawer [data-public]{display:none !important;}
+/* и наоборот показываем приватные блоки */
+body.authed .drawer [data-private]{display:block !important;}
+
+/* ---------- Логин-модалка: мобильный bottom-sheet ---------- */
+.modal { display:none; place-items:center; background:rgba(15,9,34,.42); padding:20px; }
+.modal[open]{ display:grid; }
+
+.modal__dialog{
+  width:min(440px,92vw);
+  background:#fff; border-radius:18px; box-shadow:var(--shadow);
+  padding:24px; animation:pop .2s ease;
+}
+
+/* удобство ввода */
+#login-phone, #login-pass { font-size:16px; } /* без авто-зумa на iOS */
+
+.form__actions{ display:flex; gap:8px; justify-content:flex-end; }
+.form__actions .btn{ min-width:120px; }
+
+/* Моб-режим: превращаем в нижний лист */
+@media (max-width:560px){
+  .modal{ align-items:flex-end; padding:0; }
+  .modal__dialog{
+    width:100vw; max-width:none; margin:0;
+    border-radius:16px 16px 0 0;
+    padding:16px 16px 18px;
+    box-shadow:0 -12px 30px rgba(18,6,43,.18);
+    animation:sheetUp .24s ease;
+  }
+  .modal__title{ font-size:20px; margin-bottom:10px; }
+  .row{ gap:10px; }
+  .input{ padding:12px 14px; }
+  .form__actions{
+    display:grid; grid-template-columns:1fr 1fr; gap:10px; justify-content:stretch;
+  }
+  .form__actions .btn{ width:100%; }
+}
+
+/* анимация выезда снизу */
+@keyframes sheetUp{
+  from{ transform:translateY(12px); opacity:.0; }
+  to{ transform:translateY(0); opacity:1; }
+}
+
+/* ===== LOGIN MODAL — всегда по центру и аккуратно ===== */
+.modal {
+  inset: 0;
+  display: none;
+  place-items: center;                 /* по центру по вертикали и горизонтали */
+  padding: 24px;
+  background: rgba(15, 9, 34, 0.42);   /* затемнение */
+}
+.modal[open] { display: grid; }
+
+/* если используешь <dialog>, у некоторых браузеров есть backdrop */
+.modal::backdrop { background: rgba(15, 9, 34, 0.42); }
+
+.modal__dialog {
+  width: min(420px, 92vw) !important;  /* фиксированная компактная ширина */
+  background: #fff;
+  border-radius: 18px !important;
+  box-shadow: 0 20px 60px rgba(18,6,43,.18);
+  padding: 20px 18px !important;
+  transform: translateZ(0);            /* чёткая отрисовка на мобилках */
+}
+
+.modal__title { 
+  font-size: 22px; 
+  margin: 0 0 12px; 
+}
+
+#login-phone, #login-pass { 
+  font-size: 16px;                     /* без зума на iOS */
+}
+
+.form__actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+.form__actions .btn { min-width: 120px; }
+
+/* на узких — те же размеры, но остаёмся по центру */
+@media (max-width: 560px){
+  .modal { padding: 16px; }
+  .modal__dialog { width: min(380px, 94vw) !important; padding: 16px 14px !important; }
+  .form__actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .form__actions .btn { width: 100%; }
+}
+
+
+/* ==== LOGIN MODAL — всегда по центру ==== */
+.modal{
+  position: fixed;
+  inset: 0;
+  display: grid !important;
+  place-items: center !important;   /* центр по обеим осям */
+  padding: 24px !important;
+  background: rgba(15,9,34,.42);
+  z-index: 300;
+}
+
+/* фон для <dialog> (Safari/Chromium) */
+.modal::backdrop{ background: rgba(15,9,34,.42); }
+
+/* компактная карточка по центру */
+.modal__dialog{
+  width: min(420px, 92vw) !important; /* НЕ 100% */
+  max-height: 90vh;
+  overflow: auto;
+  background: #fff;
+  border-radius: 18px !important;
+  box-shadow: 0 20px 60px rgba(18,6,43,.18);
+  padding: 20px 18px !important;
+  transform: translateZ(0);
+}
+
+/* удобнее на очень узких — остаёмся в центре */
+@media (max-width:560px){
+  .modal{ padding: 16px !important; }          /* не прижимаем вниз */
+  .modal__dialog{ width: min(380px,94vw) !important; padding:16px 14px !important; }
+}
+
+/* блокировка прокрутки фона, пока открыт диалог */
+body:has(.modal[open]){ overflow: hidden; }
+
+
+/* правильное управление видимостью dialog */
+.modal { 
+  display: none !important;         /* по умолчанию скрыто */
+  position: fixed;
+  inset: 0;
+  place-items: center;
+  padding: 24px;
+  background: rgba(15,9,34,.42);
+  z-index: 300;
+}
+
+.modal[open] {
+  display: flex !important;         /* показываем только когда [open] */
+  margin: 0 auto;
+  align-items: center;
+}
+
+
+/* по умолчанию все приватные блоки в drawer скрываем */
+.drawer [data-private]{display:none !important;}
+/* когда авторизованы — показываем */
+body.authed .drawer [data-private]{display:block !important;}
+
+/* конкретно user-блок: скрыт по умолчанию, видим только при auth */
+.drawer-user{display:none;}                     /* было: display:flex */
+body.authed .drawer-user{display:flex;}
+
+
+
+
+/* ===== CLEAN FOOTER ===== */
+.site-footer{
+  background:#0f1020; color:#e8e6ff;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+.site-footer .wrap{
+  max-width: var(--maxw); margin:0 auto; padding:36px 20px;
+  display:grid; gap:22px;
+  grid-template-columns: 1.2fr repeat(3, minmax(160px,1fr));
+}
+.site-footer h4{
+  font-size:1rem; letter-spacing:.2px; margin-bottom:10px; color:#fff;
+}
+.site-footer a{
+  color:#b9f3f1; opacity:.9; text-decoration:none; transition:opacity .2s;
+}
+.site-footer a:hover{ opacity:1; }
+.site-footer ul{ list-style:none; padding:0; margin:0; display:grid; gap:8px; }
+
+.site-footer .brand{
+  gap:12px; font-weight:800; font-size:1.05rem; color:#fff;
+}
+.site-footer .brand__logo{ box-shadow:none; }
+.site-footer .desc{ color:#bcb7e6; margin-top:6px; max-width:40ch; }
+
+.footer-bar{
+  border-top:1px solid rgba(255,255,255,.06);
+  padding:12px 20px; color:#bcb7e6;
+}
+.footer-bar .bar-wrap{
+  max-width: var(--maxw); margin:0 auto; display:flex; gap:12px; align-items:center; justify-content:space-between;
+}
+.footer-links{ display:flex; gap:14px; flex-wrap:wrap; }
+
+.social{ display:flex; gap:10px; margin-top:10px; }
+.social a{ width:36px; height:36px; border:1px solid rgba(255,255,255,.12); border-radius:10px; display:grid; place-items:center; }
+.social svg{ width:18px; height:18px; fill:#b9f3f1; }
+
+/* responsive */
+@media (max-width:900px){
+  .site-footer .wrap{ grid-template-columns: 1fr 1fr; }
+}
+@media (max-width:560px){
+  .site-footer .wrap{ grid-template-columns: 1fr; padding:28px 16px; }
+  .footer-bar .bar-wrap{ flex-direction:column; align-items:flex-start; gap:8px; }
+}
+
   </style>
 </head>
 <body>
-  <div class="progress" id="progress"></div>
-
+  <!-- =======================================================
+       HEADER
+  ======================================================== -->
   <header>
     <div class="container nav" role="navigation" aria-label="Главная навигация">
       <div class="brand" aria-label="#мамаможет">
         <div class="brand__logo" aria-hidden="true"></div>
-        <div>Мама может <span class="muted">#мамаможет</span></div>
+        <div class="brand__text">Мама может <span class="muted">#мамаможет</span></div>
       </div>
 
-      <nav class="nav__links" aria-label="Секции">
+      <!-- Нав для публичной части -->
+      <nav class="nav__links" aria-label="Секции" data-public>
+        <a href="#home">Главная</a>
+        <a href="#features">О проекте</a>
+        <a href="#testimonials">Отзывы</a>
+        <a href="#partners">Партнеры</a>
+        <a href="#cta">Присоединиться</a>
+      </nav>
+
+      <!-- Нав для приватной части -->
+      <nav class="nav__links" aria-label="Секции" data-private>
+        <a href="#home">Главная</a>
         <a href="#courses">Курсы</a>
         <a href="#market">Маркетплейс</a>
         <a href="#jobs">Вакансии</a>
         <a href="#grants">Гранты</a>
         <a href="#support">Помощь</a>
-        <a href="#about">О проекте</a>
       </nav>
 
       <div class="nav__actions">
-        <button class="btn btn--ghost" id="btn-login">Войти</button>
-        <button class="btn" id="btn-join" onclick="document.querySelector('[href=\'#courses\']').click()">Присоединиться</button>
-        <details class="user" id="user-area" style="display:none">
-          <summary class="user__btn"><span id="user-login"></span><span class="chip" id="user-role"></span></summary>
+        <button class="btn btn--ghost" id="btn-login" data-public>Войти</button>
+        <button class="btn" id="btn-join" data-public>Присоединиться</button>
+
+        <details class="user" id="user-area" style="display:none" data-private>
+          <summary class="user__btn">
+            <span id="user-login"></span>
+            <span class="chip" id="user-role"></span>
+          </summary>
           <div class="user__menu">
             <a class="menu__item" href="#profile">Профиль</a>
             <button class="menu__item" id="btn-logout">Выйти</button>
           </div>
         </details>
-        <!-- Burger stays on the RIGHT -->
-        <button class="burger" id="burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="drawer"><span></span></button>
+
+        <button class="burger" id="burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="drawer">
+          <span></span>
+        </button>
       </div>
     </div>
   </header>
 
-  <!-- Mobile drawer -->
+  <!-- =======================================================
+       MOBILE DRAWER
+  ======================================================== -->
   <aside class="drawer" id="drawer" aria-hidden="true">
-    <nav>
+    <!-- Блок пользователя (отображается только после авторизации) -->
+    <div class="drawer-user" data-private>
+      <div class="drawer-user__info">
+        <span class="drawer-user__name" id="drawer-username">Имя пользователя</span>
+        <span class="drawer-user__role" id="drawer-userrole">Роль</span>
+      </div>
+      <button class="btn btn--ghost" id="drawer-logout">Выйти</button>
+    </div>
+    
+    <!-- Навигация для публичной части -->
+    <nav data-public>
+      <a href="#home">Главная</a>
+      <a href="#features">О проекте</a>
+      <a href="#testimonials">Отзывы</a>
+      <a href="#partners">Партнеры</a>
+      <a href="#cta">Присоединиться</a>
+    </nav>
+    
+    <!-- Навигация для приватной части -->
+    <nav data-private>
+      <a href="#home">Главная</a>
       <a href="#courses">Курсы</a>
       <a href="#market">Маркетплейс</a>
       <a href="#jobs">Вакансии</a>
       <a href="#grants">Гранты</a>
       <a href="#support">Помощь</a>
-      <a href="#about">О проекте</a>
     </nav>
+    
+    <!-- Кнопки авторизации (отображаются только до авторизации) -->
+    <div class="drawer-auth-actions" data-public>
+      <button class="btn" id="drawer-login">Войти</button>
+      <button class="btn btn--ghost" id="drawer-join">Присоединиться</button>
+    </div>
   </aside>
 
+  <!-- =======================================================
+       MAIN
+  ======================================================== -->
   <main>
+    <!-- ===== HERO (общий) ===== -->
     <section class="hero container" id="home">
       <div class="hero__wrap">
         <h1 class="hero__title">МАМА ҚОЛЫНАН БӘРІ КЕЛЕДІ — ЕГЕР ЖАНЫНДА СЕНЕТІНДЕР БОЛСА…</h1>
         <p class="hero__subtitle">Социально‑деловая онлайн‑платформа для мам: обучение, удалённая работа, поддержка и сообщество.</p>
-        <div class="hero__cta">
+        <div class="hero__cta" data-public>
+          <a class="btn" href="#features">Узнать больше</a>
+          <a class="btn btn--ghost" href="#testimonials">Наши возможности</a>
+        </div>
+        <div class="hero__cta" data-private>
           <a class="btn" href="#courses">Курсы</a>
           <a class="btn btn--ghost" href="#market">Маркетплейс</a>
           <a class="btn btn--ghost" href="#jobs">Вакансии</a>
@@ -263,24 +1306,63 @@
           <span class="chip">💼 Работа</span>
           <span class="chip">🤝 Поддержка</span>
         </div>
-        <div class="waves"><div class="wave"></div></div>
       </div>
     </section>
 
-    <!-- Быстрые метрики -->
-    <section id="stats">
+    <section id="features" data-public>
       <div class="container">
-        <div class="cards">
-          <article class="card reveal"><h3>5000+</h3><div class="muted">участниц сообщества</div></article>
-          <article class="card reveal"><h3>120+</h3><div class="muted">активных вакансий</div></article>
-          <article class="card reveal"><h3>60+</h3><div class="muted">грантов и программ</div></article>
-          <article class="card reveal"><h3>30+</h3><div class="muted">курсов и мастер‑классов</div></article>
+        <div class="section__head"><h2>О проекте «Мама может»</h2></div>
+        <div class="muted">сообщество • обучение • работа</div>
+
+        <div class="cards" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+          <article class="card"><h3>🎓 Образовательные курсы</h3><div class="muted">Востребованные навыки, кураторы, удобный темп.</div></article>
+          <article class="card"><h3>💼 Удалённая работа</h3><div class="muted">Биржа вакансий с гибким графиком.</div></article>
+          <article class="card"><h3>🤝 Сообщество и менторы</h3><div class="muted">Чаты, консультации, психологическая поддержка.</div></article>
+          <article class="card"><h3>💰 Гранты и конкурсы</h3><div class="muted">Финансирование женских проектов.</div></article>
+          <article class="card"><h3>🛍️ Маркетплейс</h3><div class="muted">Продажа handmade и услуг.</div></article>
+          <article class="card"><h3>👩‍👧‍👦 Мероприятия</h3><div class="muted">Онлайн/офлайн активити для семьи.</div></article>
         </div>
       </div>
     </section>
 
-    <!-- КУРСЫ -->
-    <section id="courses">
+    <section id="testimonials" data-public>
+      <div class="container">
+        <div class="section__head"><h2>Истории успеха</h2></div>
+        <div class="cards" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+          <article class="card"><div class="muted">«Освоила копирайтинг и начала зарабатывать из дома. Есть время на детей и работу.»</div><strong>Айгуль</strong><div class="muted">Копирайтер</div></article>
+          <article class="card"><div class="muted">«Получила грант и запустила бренд детской одежды. Без сообщества не справилась бы.»</div><strong>Мадина</strong><div class="muted">Дизайнер</div></article>
+          <article class="card"><div class="muted">«Нашла гибкий проект и поддержку от мам с похожими задачами.»</div><strong>Асель</strong><div class="muted">SMM</div></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="partners" data-public>
+      <div class="container">
+        <div class="section__head"><h2>Наши партнёры</h2></div>
+        <div class="cards" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+          <article class="card center muted">Министерство труда</article>
+          <article class="card center muted">Фонд «Даму»</article>
+          <article class="card center muted">Центр поддержки женщин</article>
+          <article class="card center muted">Astana Hub</article>
+        </div>
+      </div>
+    </section>
+
+    <section id="cta" data-public>
+      <div class="container">
+        <div class="card" style="background:linear-gradient(135deg,var(--primary),var(--secondary)); color:#fff; text-align:center; padding:40px">
+          <h3 style="font-size:clamp(24px,4vw,36px); margin:0 0 8px 0">Готовы начать?</h3>
+          <p class="muted" style="color:#fff; opacity:.9; margin:0 0 14px 0">Присоединяйтесь к #мамаможет и откройте новые возможности</p>
+          <div class="hero__cta">
+            <button class="btn" id="cta-join">Присоединиться бесплатно</button>
+            <a class="btn btn--ghost" href="#features">Подробнее</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== ПРИВАТНЫЕ РАЗДЕЛЫ (после входа) ===== -->
+    <section id="courses" data-private>
       <div class="container">
         <div class="section__head">
           <h2>Курстар</h2>
@@ -294,15 +1376,16 @@
             <option value="price">Баға бойынша</option>
             <option value="duration">Ұзақтығы бойынша</option>
           </select>
-          <button class="btn btn--subtle" id="course-dir" aria-pressed="false" title="Направление сортировки">↑</button>
+          <button class="btn btn--ghost" id="course-dir" aria-pressed="false" title="Направление сортировки">↑</button>
         </div>
         <div class="cards" id="courses-list"></div>
-        <div class="center mt-12"><button class="btn btn--ghost" id="courses-more">Тағы көрсету</button></div>
+        <div class="center mt-12">
+          <button class="btn btn--ghost" id="courses-more">Тағы көрсету</button>
+        </div>
       </div>
     </section>
 
-    <!-- МАРКЕТ -->
-    <section id="market">
+    <section id="market" data-private>
       <div class="container">
         <div class="section__head">
           <h2>Маркетплейс</h2>
@@ -315,16 +1398,17 @@
             <option value="price">Баға бойынша</option>
             <option value="title">Атауы бойынша</option>
           </select>
-          <button class="btn btn--subtle" id="market-dir" aria-pressed="false">↑</button>
+          <button class="btn btn--ghost" id="market-dir" aria-pressed="false">↑</button>
           <button class="btn" id="market-add">Хабарландыру қосу</button>
         </div>
         <div class="cards" id="market-list"></div>
-        <div class="center mt-12"><button class="btn btn--ghost" id="market-more">Тағы көрсету</button></div>
+        <div class="center mt-12">
+          <button class="btn btn--ghost" id="market-more">Тағы көрсету</button>
+        </div>
       </div>
     </section>
 
-    <!-- ВАКАНСИИ -->
-    <section id="jobs">
+    <section id="jobs" data-private>
       <div class="container">
         <div class="section__head">
           <h2>Вакансии / Биржа</h2>
@@ -337,15 +1421,16 @@
             <option value="sum">По оплате</option>
             <option value="title">По названию</option>
           </select>
-          <button class="btn btn--subtle" id="jobs-dir" aria-pressed="false">↑</button>
+          <button class="btn btn--ghost" id="jobs-dir" aria-pressed="false">↑</button>
         </div>
         <div class="cards" id="jobs-list"></div>
-        <div class="center mt-12"><button class="btn btn--ghost" id="jobs-more">Показать ещё</button></div>
+        <div class="center mt-12">
+          <button class="btn btn--ghost" id="jobs-more">Показать ещё</button>
+        </div>
       </div>
     </section>
 
-    <!-- ГРАНТЫ -->
-    <section id="grants">
+    <section id="grants" data-private>
       <div class="container">
         <div class="section__head">
           <h2>Гранттар</h2>
@@ -355,107 +1440,100 @@
           <input class="input" id="grants-search" placeholder="Іздеу" />
           <select id="grants-sort">
             <option value="deadline">Дедлайн бойынша</option>
-            <option value="sum" selected>Сома бойынша</option>
+            <option value="sum">Сома бойынша</option>
             <option value="title">Атауы бойынша</option>
           </select>
-          <button class="btn btn--subtle" id="grants-dir" aria-pressed="false">↑</button>
+          <button class="btn btn--ghost" id="grants-dir" aria-pressed="false">↑</button>
         </div>
         <div class="cards" id="grants-list"></div>
-        <div class="center mt-12"><button class="btn btn--ghost" id="grants-more">Тағы көрсету</button></div>
+        <div class="center mt-12">
+          <button class="btn btn--ghost" id="grants-more">Тағы көрсету</button>
+        </div>
       </div>
     </section>
 
-    <!-- ПОДДЕРЖКА -->
-    <section id="support">
+    <section id="support" data-private>
       <div class="container">
         <div class="section__head"><h2>Көмек</h2></div>
         <div class="cards" id="support-list"></div>
       </div>
     </section>
-
-    <!-- ОТЗЫВЫ -->
-    <section id="reviews">
-      <div class="container">
-        <div class="section__head"><h2>Отзывы</h2></div>
-        <div class="reviews">
-          <article class="review">
-            <div class="review__head">
-              <div class="review__avatar" aria-hidden="true"></div>
-              <div><strong>Айгерим</strong><div class="muted">Алматы</div></div>
-            </div>
-            <div class="muted stars" aria-label="Рейтинг: 5 из 5">★★★★★</div>
-            <p>Нашла первую удалённую работу через платформу. Удобно и быстро!</p>
-          </article>
-          <article class="review">
-            <div class="review__head">
-              <div class="review__avatar" aria-hidden="true"></div>
-              <div><strong>Марина</strong><div class="muted">Шымкент</div></div>
-            </div>
-            <div class="muted stars" aria-label="Рейтинг: 5 из 5">★★★★★</div>
-            <p>Курсы по маркетингу оказались очень практичными. Спасибо команде!</p>
-          </article>
-          <article class="review">
-            <div class="review__head">
-              <div class="review__avatar" aria-hidden="true"></div>
-              <div><strong>Динара</strong><div class="muted">Астана</div></div>
-            </div>
-            <div class="muted stars" aria-label="Рейтинг: 4 из 5">★★★★☆</div>
-            <p>Грантов много и фильтры работают отлично — быстро нашла подходящее.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- FAQ -->
-    <section id="faq">
-      <div class="container">
-        <div class="section__head"><h2>FAQ</h2></div>
-        <details class="faq">
-          <summary><strong>Как подать заявку на грант?</strong></summary>
-          <p class="muted">Откройте раздел «Гранттар», отфильтруйте по сумме/дедлайну и нажмите «Подать» на карточке.</p>
-        </details>
-        <details class="faq">
-          <summary><strong>Нужна ли регистрация для отклика на вакансию?</strong></summary>
-          <p class="muted">Да, авторизуйтесь через «Войти» — после этого кнопка «Откликнуться» отправит заявку.</p>
-        </details>
-        <details class="faq">
-          <summary><strong>Откуда данные?</strong></summary>
-          <p class="muted">Все данные подтягиваются из Google Sheets и обновляются при каждом заходе.</p>
-        </details>
-      </div>
-    </section>
-
-    <!-- О ПРОЕКТЕ -->
-    <section id="about">
-      <div class="container">
-        <div class="section__head"><h2>О проекте</h2></div>
-        <div class="cards">
-          <article class="card reveal">
-            <h3>Миссия</h3>
-            <div class="muted">Дать мамам доступ к качественному обучению, удалённой работе и поддерживающему сообществу.</div>
-          </article>
-          <article class="card reveal">
-            <h3>Ценности</h3>
-            <div class="muted">Безопасность, уважение, рост, инклюзивность, взаимопомощь.</div>
-          </article>
-          <article class="card reveal">
-            <h3>Как это работает</h3>
-            <div class="muted">Выбирайте курсы, публикуйте товары и услуги в маркетплейсе, откликайтесь на вакансии и гранты.</div>
-          </article>
-        </div>
-      </div>
-    </section>
   </main>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="container">
-      <strong>Мама может</strong> · <span>#мамаможет</span>
-      <div class="muted">Email: mamamojet@gmail.com · Tel: +7 775 388 2202</div>
+  <!-- =======================================================
+       FOOTER
+  ======================================================== -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <div>
+        <div class="brand">
+          <div class="brand__logo" aria-hidden="true"></div>
+          Мама может <span class="muted">#мамаможет</span>
+        </div>
+        <p class="desc">Социально‑деловая платформа для мам: обучение, удалённая работа, поддержка и сообщество.</p>
+        <div class="social" aria-label="Социальные сети">
+          <a href="https://t.me/mamamojet" aria-label="Telegram">
+            <svg viewBox="0 0 24 24"><path d="M9.04 15.21 8.9 19.2c.57 0 .82-.25 1.12-.55l2.69-2.58 5.58 4.09c1.02.56 1.75.27 2.03-.94l3.68-17.2c.34-1.6-.58-2.23-1.6-1.84L1.38 9.9c-1.54.6-1.52 1.46-.27 1.85l6.46 2.02 14.97-9.43c.7-.42 1.34-.19.81.23"/></svg>
+          </a>
+          <a href="mailto:mamamojet@gmail.com" aria-label="Email">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          </a>
+          <a href="tel:+77753882202" aria-label="Телефон">
+            <svg viewBox="0 0 24 24"><path d="M6.6 10.8a15.05 15.05 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1.04-.24c1.14.38 2.38.58 3.56.58a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C11.3 21 3 12.7 3 3a1 1 0 0 1 1-1h3.46a1 1 0 0 1 1 1c0 1.18.2 2.42.58 3.56a1 1 0 0 1-.24 1.04L6.6 10.8z"/></svg>
+          </a>
+        </div>
+      </div>
+  
+      <div>
+        <h4>Платформа</h4>
+        <ul>
+          <li><a href="#features">О проекте</a></li>
+          <li><a href="#testimonials">Отзывы</a></li>
+          <li><a href="#partners">Партнёры</a></li>
+          <li><a href="#cta">Присоединиться</a></li>
+        </ul>
+      </div>
+  
+      <div data-private>
+        <h4>Возможности</h4>
+        <ul>
+          <li><a href="#courses">Курсы</a></li>
+          <li><a href="#market">Маркетплейс</a></li>
+          <li><a href="#jobs">Вакансии</a></li>
+          <li><a href="#grants">Гранты</a></li>
+          <li><a href="#support">Помощь</a></li>
+        </ul>
+      </div>
+  
+      <div>
+        <h4>Контакты</h4>
+        <ul>
+          <li><a href="mailto:mamamojet@gmail.com">mamamojet@gmail.com</a></li>
+          <li><a href="tel:+77753882202">+7 775 388 2202</a></li>
+          <li><a href="#home">Казахстан</a></li>
+        </ul>
+      </div>
+    </div>
+  
+    <div class="footer-bar">
+      <div class="bar-wrap">
+        <div>© <span id="year"></span> «Мама может». Все права защищены.</div>
+        <div class="footer-links">
+          <a href="#">Политика конфиденциальности</a>
+          <a href="#">Пользовательское соглашение</a>
+        </div>
+      </div>
     </div>
   </footer>
+  
+  <script>
+    // актуальный год в плашке
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 
-  <!-- LOGIN MODAL -->
+  <!-- =======================================================
+       LOGIN MODAL
+  ======================================================== -->
   <dialog class="modal" id="modal-login" aria-labelledby="login-title" aria-modal="true">
     <div class="modal__dialog">
       <h3 class="modal__title" id="login-title">Вход</h3>
@@ -465,450 +1543,468 @@
           <input class="input" name="pass" id="login-pass" type="password" placeholder="Пароль" autocomplete="current-password" required />
         </div>
         <div class="error" id="login-error">Неверный логин или пароль</div>
-        <div style="display:flex;justify-content:flex-end;gap:8px">
-          <button type="button" class="btn btn--ghost" data-close>Отмена</button>
-          <button type="submit" class="btn"><span class="spinner" id="login-spin"></span><span>Войти</span></button>
+        <div class="form__actions">
+          <button type="button" class="btn btn--ghost" data-close formnovalidate>Отмена</button>
+          <button type="submit" class="btn">
+            <span class="spinner" id="login-spin"></span><span>Войти</span>
+          </button>
         </div>
       </form>
     </div>
   </dialog>
 
-  <!-- TOASTS & TO-TOP -->
-  <div class="toast" id="toast" aria-live="polite" aria-atomic="true"></div>
-  <button class="btn totop" id="totop" title="Наверх">↑</button>
-
+  <!-- =======================================================
+       SCRIPTS
+  ======================================================== -->
   <script>
     /* ===================== CONFIG ===================== */
     const CONFIG = {
       spreadsheetId: '1najoTh6IacXwU_se-9de-KMlZ7XQ5F64d0P1rdlMXTQ',
-      sheets: { users:'Юзеры', courses:'Курсы', market:'Маркетплейс', jobs:'Вакансии', grants:'Гранты', support:'Поддержка' }
+      sheets: {
+        users: 'Юзеры',
+        courses: 'Курсы',
+        market: 'Маркетплейс',
+        jobs: 'Вакансии',
+        grants: 'Гранты',
+        support: 'Поддержка'
+      }
     };
 
-    /* UTILITIES */
-    const $ = sel => document.querySelector(sel);
-    const $$ = sel => [...document.querySelectorAll(sel)];
-    const app = { users:[], data:{courses:[], market:[], jobs:[], grants:[], support:[]}, user:null, pagers:{} };
+    /* ===================== UI BASICS ===================== */
+    // Smooth anchor scroll
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      const id = a.getAttribute('href');
+      const el = document.querySelector(id);
+      if (el) { e.preventDefault(); el.scrollIntoView({ behavior:'smooth', block:'start' }); closeDrawer(); }
+    });
 
-    function toast(msg, timeout=2200){
-      const box = $('#toast'); const el = document.createElement('div');
-      el.className = 'toast__item'; el.textContent = msg; box.appendChild(el);
-      setTimeout(()=>{ el.style.opacity='0'; el.style.transform='translateY(6px)'; setTimeout(()=>el.remove(),220); }, timeout);
-    }
+    // Header shadow on scroll
+    const header = document.querySelector('header');
+    document.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 10);
+    });
 
+    // Burger & drawer
+    const burger = document.getElementById('burger');
+    const drawer = document.getElementById('drawer');
+    function openDrawer(){ drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false'); burger.setAttribute('aria-expanded','true'); document.body.classList.add('noscroll'); }
+    function closeDrawer(){ drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); burger.setAttribute('aria-expanded','false'); document.body.classList.remove('noscroll'); }
+    burger.addEventListener('click', () => { drawer.classList.contains('open') ? closeDrawer() : openDrawer(); });
+    drawer.addEventListener('click', (e) => { if (e.target.matches('a')) closeDrawer(); });
+
+    // Reveal cards on scroll
+    const revealIO = new IntersectionObserver((entries) => {
+      entries.forEach(ent => {
+        if (ent.isIntersecting) { ent.target.classList.add('reveal'); revealIO.unobserve(ent.target); }
+      });
+    }, { threshold:.12 });
+
+    /* ===================== HELPERS ===================== */
     function unique(arr){ return [...new Set(arr.filter(Boolean))]; }
     function fillSelectOptions(selectEl, values, firstLabel='Барлығы'){
-      if(!selectEl) return;
+      if (!selectEl) return;
       const opts = [`<option value="">${firstLabel}</option>`].concat(values.map(v => `<option value="${v}">${v}</option>`));
       selectEl.innerHTML = opts.join('');
     }
     function toggleDir(btn){
-      const now = btn.getAttribute('aria-pressed')==='true';
+      const now = btn.getAttribute('aria-pressed') === 'true';
       btn.setAttribute('aria-pressed', String(!now));
       btn.textContent = !now ? '↓' : '↑';
     }
 
-    /* Smooth anchor scroll & drawer close */
-    document.addEventListener('click', (e)=>{
-      const a = e.target.closest('a[href^="#"]');
-      if(!a) return;
-      const id = a.getAttribute('href');
-      const el = document.querySelector(id);
-      if(el){ e.preventDefault(); el.scrollIntoView({behavior:'smooth', block:'start'}); closeDrawer(); }
-    });
-
-    /* Header shadow on scroll + progress + toTop */
-    const header = document.querySelector('header');
-    const progress = $('#progress');
-    const totop = $('#totop');
-    function onScroll(){
-      const y = window.scrollY;
-      header.classList.toggle('scrolled', y>10);
-      const h = document.documentElement.scrollHeight - window.innerHeight;
-      const p = h>0 ? (y / h) : 0; progress.style.transform = `scaleX(${p})`;
-      totop.classList.toggle('show', y>500);
-    }
-    document.addEventListener('scroll', onScroll);
-    totop.addEventListener('click', ()=> window.scrollTo({top:0,behavior:'smooth'}));
-
-    /* Burger & drawer */
-    const burger = document.getElementById('burger');
-    const drawer = document.getElementById('drawer');
-    function openDrawer(){drawer.classList.add('open');drawer.setAttribute('aria-hidden','false');burger.setAttribute('aria-expanded','true');document.body.classList.add('noscroll');}
-    function closeDrawer(){drawer.classList.remove('open');drawer.setAttribute('aria-hidden','true');burger.setAttribute('aria-expanded','false');document.body.classList.remove('noscroll');}
-    burger.addEventListener('click', ()=>{ drawer.classList.contains('open') ? closeDrawer() : openDrawer(); });
-    drawer.addEventListener('click', (e)=>{ if(e.target.matches('a')) closeDrawer(); });
-
-    /* Reveal on scroll for cards */
-    const revealIO = new IntersectionObserver((entries)=>{
-      entries.forEach(ent=>{ if(ent.isIntersecting){ ent.target.classList.add('reveal'); revealIO.unobserve(ent.target); } });
-    },{threshold:.12});
-
-    /* Fetch from Google Sheets */
+    /* ===================== FETCH SHEETS ===================== */
     async function fetchSheet(sheet){
       const url = `https://docs.google.com/spreadsheets/d/${CONFIG.spreadsheetId}/gviz/tq?sheet=${encodeURIComponent(sheet)}&tqx=out:json`;
-      const res = await fetch(url,{cache:'no-store'});
+      const res = await fetch(url, { cache:'no-store' });
       const txt = await res.text();
-      const json = JSON.parse(txt.slice(txt.indexOf('{'), txt.lastIndexOf('}')+1));
-      const cols = json.table.cols.map(c => (c.label||'').trim());
-      return json.table.rows.map(r=>{
-        const row={}; r.c?.forEach((cell,i)=> row[cols[i]] = cell && cell.v!=null ? String(cell.v).trim() : '');
+      const json = JSON.parse(txt.slice(txt.indexOf('{'), txt.lastIndexOf('}') + 1));
+      const cols = json.table.cols.map(c => (c.label || '').trim());
+      return json.table.rows.map(r => {
+        const row = {};
+        r.c?.forEach((cell,i) => row[cols[i]] = cell && cell.v != null ? String(cell.v).trim() : '');
         return row;
       });
     }
 
-    /* ===================== AUTH (same logic + UX) ===================== */
+    /* ===================== APP STATE ===================== */
+    const app = { users:[], data:{ courses:[], market:[], jobs:[], grants:[], support:[] }, user:null };
+
+    /* ===================== AUTH ===================== */
     const modalLogin = document.getElementById('modal-login');
-    const btnLogin = document.getElementById('btn-login');
-    const userArea = document.getElementById('user-area');
+    const btnLogin  = document.getElementById('btn-login');
+    const btnJoin   = document.getElementById('btn-join');
+    const ctaJoin   = document.getElementById('cta-join');
+    const ctaOpen   = document.getElementById('cta-open-login');
+    const userArea  = document.getElementById('user-area');
     const userLogin = document.getElementById('user-login');
     const userRole  = document.getElementById('user-role');
+    const drawerUsername = document.getElementById('drawer-username');
+    const drawerUserrole = document.getElementById('drawer-userrole');
 
     function openModal(m){ m.showModal(); }
     function closeModal(m){ m.close(); }
 
-    btnLogin.addEventListener('click', ()=> openModal(modalLogin));
-    modalLogin.addEventListener('click', e=> { if(e.target.hasAttribute('data-close') || e.target===modalLogin) closeModal(modalLogin); });
+    btnLogin?.addEventListener('click', () => openModal(modalLogin));
+    btnJoin?.addEventListener('click', () => openModal(modalLogin));
+    ctaJoin?.addEventListener('click', () => openModal(modalLogin));
+    ctaOpen?.addEventListener('click', () => openModal(modalLogin));
 
-    function phoneMask(value){ return value.replace(/\D/g,'').slice(0,12); }
+    // Обработчики для кнопок в drawer
+    document.getElementById('drawer-login')?.addEventListener('click', () => {
+      openModal(modalLogin);
+      closeDrawer();
+    });
+    document.getElementById('drawer-join')?.addEventListener('click', () => {
+      openModal(modalLogin);
+      closeDrawer();
+    });
+    document.getElementById('drawer-logout')?.addEventListener('click', () => {
+      document.getElementById('btn-logout').click();
+      closeDrawer();
+    });
+
+    modalLogin.addEventListener('click', (e) => {
+      if (e.target.hasAttribute('data-close') || e.target === modalLogin) closeModal(modalLogin);
+    });
+
+    function phoneMask(v){ return v.replace(/\D/g,'').slice(0,12); }
 
     async function initAuth(){
       app.users = await fetchSheet(CONFIG.sheets.users);
       const saved = localStorage.getItem('mm_user');
-      if(saved){ app.user = JSON.parse(saved); showUser(); }
+      if (saved) app.user = JSON.parse(saved);
+      showUser();
     }
 
     function showUser(){
-      if(!app.user){
-        btnLogin.style.display='';
-        document.getElementById('btn-join').style.display='';
-        userArea.style.display='none';
-        return;
+      const isAuthed = !!app.user;
+      document.body.classList.toggle('authed', isAuthed);
+
+      if (!isAuthed){
+        btnLogin?.style.setProperty('display','');
+        btnJoin?.style.setProperty('display','');
+        userArea.style.display = 'none';
+      } else {
+        btnLogin?.style.setProperty('display','none');
+        btnJoin?.style.setProperty('display','none');
+        userArea.style.display = 'block';
+        userLogin.textContent  = app.user.login;
+        userRole.textContent   = app.user.role || '';
+        
+        // Обновляем информацию в drawer
+        drawerUsername.textContent = app.user.login;
+        drawerUserrole.textContent = app.user.role || 'Пользователь';
       }
-      btnLogin.style.display='none';
-      document.getElementById('btn-join').style.display='none'; // скрываем после логина
-      userArea.style.display='block';
-      userLogin.textContent = app.user.login;
-      userRole.textContent = app.user.role || '';
-      toast('Добро пожаловать!');
     }
 
-    document.getElementById('btn-logout').addEventListener('click', ()=>{
-      app.user=null; localStorage.removeItem('mm_user'); showUser(); toast('Вы вышли из аккаунта');
+    document.getElementById('btn-logout').addEventListener('click', () => {
+      app.user = null; 
+      localStorage.removeItem('mm_user'); 
+      showUser();
+      // скролл обратно на главную после выхода
+      document.querySelector('#home')?.scrollIntoView({ behavior:'smooth', block:'start' });
     });
 
-    document.getElementById('login-form').addEventListener('submit', (e)=>{
+    document.getElementById('login-form').addEventListener('submit', (e) => {
       e.preventDefault();
       const spin = document.getElementById('login-spin');
-      const err = document.getElementById('login-error');
-      err.removeAttribute('show'); spin.setAttribute('show','');
+      const err  = document.getElementById('login-error');
+      err.removeAttribute('show'); 
+      spin.setAttribute('show','');
 
       const login = phoneMask(document.getElementById('login-phone').value);
       const pass  = document.getElementById('login-pass').value;
 
-      setTimeout(()=>{
-        const u = app.users.find(x => x['Логин']===login && x['Пароль']===pass);
+      setTimeout(() => {
+        const u = app.users.find(x => x['Логин'] === login && x['Пароль'] === pass);
         spin.removeAttribute('show');
-        if(!u){ err.setAttribute('show',''); return; }
-        app.user = {login, role: u['Роль']||''};
+        if (!u){ 
+          err.setAttribute('show',''); 
+          return; 
+        }
+
+        app.user = { login, role: (u['Роль'] || '') };
         localStorage.setItem('mm_user', JSON.stringify(app.user));
-        showUser(); closeModal(modalLogin);
+        showUser(); 
+        closeModal(modalLogin);
+        closeDrawer();
+
+        // после логина — прокрутка к первым приватным возможностям
+        document.querySelector('#courses')?.scrollIntoView({ behavior:'smooth', block:'start' });
       }, 400);
     });
 
-    /* ===================== SKELETON HELPERS ===================== */
-    function skeletonCards(containerId, count=6){
-      const list = document.getElementById(containerId);
-      list.innerHTML = '';
-      for(let i=0;i<count;i++){
-        const el = document.createElement('article');
-        el.className='s-card';
-        el.innerHTML = `
-          <div class="skeleton s-badge"></div>
-          <div class="skeleton s-line" style="width:70%"></div>
-          <div class="skeleton s-line" style="width:40%"></div>
-          <div class="skeleton s-line" style="width:55%"></div>`;
-        list.appendChild(el);
-      }
-    }
+    /* ===================== COUNTERS (public) ===================== */
+    const counterIO = new IntersectionObserver((entries) => {
+      entries.forEach(ent => {
+        if (!ent.isIntersecting) return;
+        const el = ent.target;
+        const to = Number(el.dataset.to || 0), from = Number(el.dataset.from || 0);
+        const start = performance.now(), dur = 900;
+        (function tick(t0){
+          const p = Math.min(1, (t0 - start) / dur);
+          const val = Math.floor(from + (to - from) * p);
+          el.textContent = new Intl.NumberFormat('ru-RU').format(val);
+          if (p < 1) requestAnimationFrame(tick);
+        })(start);
+        counterIO.unobserve(el);
+      });
+    }, { threshold:.4 });
 
-    /* ===================== COURSES ===================== */
+    /* ===================== DATA LOADERS (private) ===================== */
     async function loadCourses(){
-      skeletonCards('courses-list', 6);
       const rows = await fetchSheet(CONFIG.sheets.courses);
-      app.data.courses = rows.map(r=>({
+      app.data.courses = rows.map(r => ({
         id: crypto.randomUUID(),
-        tag: r['категория']||'',
-        title: r['название']||'',
-        duration: Number(r['длительность']||0),
-        price: Number(r['стоимость']||0),
-        rating: Number(r['рейтинг']||0),
-        more: r['подробнее']||''
+        tag:       r['категория']   || '',
+        title:     r['название']    || '',
+        duration:  Number(r['длительность'] || 0),
+        price:     Number(r['стоимость']    || 0),
+        rating:    Number(r['рейтинг']      || 0),
+        more:      r['подробнее']   || ''
       }));
-
-      const catValues = unique(app.data.courses.map(c=>c.tag));
+      const catValues = unique(app.data.courses.map(c => c.tag));
       fillSelectOptions(document.getElementById('course-tag'), catValues, 'Барлығы');
-
       renderCourses();
     }
     function renderCourses(){
-      const q = (document.getElementById('course-search').value||'').toLowerCase();
-      const tag = document.getElementById('course-tag').value||'';
+      const q   = (document.getElementById('course-search').value || '').toLowerCase();
+      const tag = document.getElementById('course-tag').value || '';
       const sortKey = document.getElementById('course-sort').value;
-      const desc = document.getElementById('course-dir').getAttribute('aria-pressed')==='true';
+      const desc = document.getElementById('course-dir').getAttribute('aria-pressed') === 'true';
 
-      let arr = app.data.courses.filter(c => (!tag || c.tag===tag) && (!q || c.title.toLowerCase().includes(q)));
-      arr.sort((a,b)=>{
+      let arr = app.data.courses.filter(c => (!tag || c.tag === tag) && (!q || c.title.toLowerCase().includes(q)));
+      arr.sort((a,b) => {
         const v = sortKey==='rating' ? (a.rating-b.rating)
-                : sortKey==='price' ? (a.price-b.price)
-                : (a.duration-b.duration);
+              : sortKey==='price'   ? (a.price-b.price)
+              :                       (a.duration-b.duration);
         return desc ? -v : v;
       });
 
       document.getElementById('courses-count').textContent = String(arr.length);
-      const list = document.getElementById('courses-list'); list.innerHTML='';
-      arr.forEach(c=>{
+      const list = document.getElementById('courses-list'); list.innerHTML = '';
+      arr.forEach(c => {
         const el = document.createElement('article');
-        el.className='card';
+        el.className = 'card';
         el.innerHTML = `
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
-            <div class="chip">${c.tag||'—'}</div>
-            <div class="muted" title="Рейтинг">✨ ${c.rating||0}</div>
-          </div>
+          <div class="chip">${c.tag || '—'}</div>
           <h3>${c.title}</h3>
-          <div class="muted">${c.duration||0} нед.</div>
-          <div class="price">${c.price? new Intl.NumberFormat('ru-RU').format(c.price)+' ₸':'Бесплатно'}</div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button class="btn btn--ghost">Подробнее</button>
-            <button class="btn btn--subtle">В избранное</button>
-          </div>`;
-        el.querySelector('.btn').addEventListener('click', ()=>{
-          if(!app.user){ openModal(modalLogin); return; }
+          <div class="muted">${c.duration || 0} нед · ✨ ${c.rating || 0}</div>
+          <div class="price">${c.price ? new Intl.NumberFormat('ru-RU').format(c.price)+' ₸' : 'Бесплатно'}</div>
+          <button class="btn btn--ghost">Подробнее</button>
+        `;
+        el.querySelector('button').addEventListener('click', () => {
+          if (!app.user){ openModal(modalLogin); return; }
           alert(c.more || 'Информация появится позже');
         });
-        el.querySelector('.btn--subtle').addEventListener('click', ()=> toast('Добавлено в избранное'));
         list.appendChild(el); revealIO.observe(el);
       });
     }
-    document.getElementById('course-dir').addEventListener('click', e=>{ toggleDir(e.currentTarget); renderCourses(); });
-    ['course-search','course-tag','course-sort'].forEach(id=> document.getElementById(id).addEventListener('input', renderCourses));
-    document.getElementById('courses-more').addEventListener('click', ()=> toast('Загружены все курсы'));
+    document.getElementById('course-dir').addEventListener('click', (e) => { toggleDir(e.currentTarget); renderCourses(); });
+    ['course-search','course-tag','course-sort'].forEach(id => document.getElementById(id).addEventListener('input', renderCourses));
 
-    /* ===================== MARKET ===================== */
     async function loadMarket(){
-      skeletonCards('market-list', 6);
       const rows = await fetchSheet(CONFIG.sheets.market);
-      app.data.market = rows.map(r=>({
+      app.data.market = rows.map(r => ({
         id: crypto.randomUUID(),
-        type: r['категорий']||'',
-        title: r['название']||'',
-        price: Number(r['стоимость']||0),
-        seller: (r['имя/город']||'').split('/')[0]||'',
-        location: (r['имя/город']||'').split('/')[1]||'',
-        contact: r['связаться']||''
+        type:     r['категорий'] || '',
+        title:    r['название']  || '',
+        price:    Number(r['стоимость'] || 0),
+        seller:   (r['имя/город'] || '').split('/')[0] || '',
+        location: (r['имя/город'] || '').split('/')[1] || '',
+        contact:  r['связаться'] || ''
       }));
-
-      const types = unique(app.data.market.map(m=>m.type));
+      const types = unique(app.data.market.map(m => m.type));
       fillSelectOptions(document.getElementById('market-type'), types, 'Барлығы');
-
       renderMarket();
     }
     function renderMarket(){
-      const q = (document.getElementById('market-search').value||'').toLowerCase();
-      const type = document.getElementById('market-type').value||'';
+      const q   = (document.getElementById('market-search').value || '').toLowerCase();
+      const type = document.getElementById('market-type').value || '';
       const sortKey = document.getElementById('market-sort').value;
-      const desc = document.getElementById('market-dir').getAttribute('aria-pressed')==='true';
+      const desc = document.getElementById('market-dir').getAttribute('aria-pressed') === 'true';
 
-      let arr = app.data.market.filter(m=> (!type || m.type===type) && (!q || m.title.toLowerCase().includes(q)));
-      arr.sort((a,b)=>{
-        let v = sortKey==='price' ? (a.price-b.price) : (''+a.title).localeCompare(b.title);
+      let arr = app.data.market.filter(m => (!type || m.type === type) && (!q || m.title.toLowerCase().includes(q)));
+      arr.sort((a,b) => {
+        const v = sortKey==='price' ? (a.price-b.price) : (''+a.title).localeCompare(b.title);
         return desc ? -v : v;
       });
 
       document.getElementById('market-count').textContent = String(arr.length);
-      const list = document.getElementById('market-list'); list.innerHTML='';
-      arr.forEach(m=>{
-        const el=document.createElement('article'); el.className='card';
+      const list = document.getElementById('market-list'); list.innerHTML = '';
+      arr.forEach(m => {
+        const el = document.createElement('article'); el.className = 'card';
         el.innerHTML = `
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
-            <div class="chip">${m.type||'—'}</div>
-            <div class="muted">${[m.seller,m.location].filter(Boolean).join(' · ')}</div>
-          </div>
+          <div class="chip">${m.type || '—'}</div>
           <h3>${m.title}</h3>
           <div class="price">${new Intl.NumberFormat('ru-RU').format(m.price)} ₸</div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button class="btn btn--ghost">Связаться</button>
-            <button class="btn btn--subtle">Сохранить</button>
-          </div>`;
-        el.querySelector('.btn').addEventListener('click', ()=>{
-          if(!m.contact){ alert('Контакт не указан'); return; }
-          if(m.contact.startsWith('@')) location.href = 'https://t.me/'+m.contact.slice(1);
-          else if(m.contact.replace(/\D/g,'').length>=10) location.href = 'https://wa.me/'+m.contact.replace(/\D/g,'');
+          <div class="muted">${[m.seller,m.location].filter(Boolean).join(' · ')}</div>
+          <button class="btn btn--ghost">Связаться</button>
+        `;
+        el.querySelector('button').addEventListener('click', () => {
+          if (!m.contact){ alert('Контакт не указан'); return; }
+          if (m.contact.startsWith('@')) location.href = 'https://t.me/' + m.contact.slice(1);
+          else if (m.contact.replace(/\D/g,'').length >= 10) location.href = 'https://wa.me/' + m.contact.replace(/\D/g,'');
           else location.href = m.contact;
         });
-        el.querySelector('.btn--subtle').addEventListener('click', ()=> toast('Сохранено'));
         list.appendChild(el); revealIO.observe(el);
       });
     }
-    document.getElementById('market-dir').addEventListener('click', e=>{ toggleDir(e.currentTarget); renderMarket(); });
-    ['market-search','market-type','market-sort'].forEach(id=> document.getElementById(id).addEventListener('input', renderMarket));
-    document.getElementById('market-more').addEventListener('click', ()=> toast('Загружены все объявления'));
-    document.getElementById('market-add').addEventListener('click', ()=> toast('Форма добавления появится позже'));
+    document.getElementById('market-dir').addEventListener('click', (e) => { toggleDir(e.currentTarget); renderMarket(); });
+    ['market-search','market-type','market-sort'].forEach(id => document.getElementById(id).addEventListener('input', renderMarket));
 
-    /* ===================== JOBS ===================== */
     async function loadJobs(){
-      skeletonCards('jobs-list', 6);
       const rows = await fetchSheet(CONFIG.sheets.jobs);
-      app.data.jobs = rows.map(r=>({
+      app.data.jobs = rows.map(r => ({
         id: crypto.randomUUID(),
-        cat: r['категория']||'',
-        title: r['название']||'',
-        company: r['компания']||'',
-        deadline: r['дедлайн']||'',
-        sum: Number(r['сумма']||0)
+        cat:      r['категория'] || '',
+        title:    r['название']  || '',
+        company:  r['компания']  || '',
+        deadline: r['дедлайн']   || '',
+        sum:      Number(r['сумма'] || 0)
       }));
       renderJobs();
     }
     function renderJobs(){
-      const q=(document.getElementById('jobs-search').value||'').toLowerCase();
-      const sortKey=document.getElementById('jobs-sort').value;
-      const desc=document.getElementById('jobs-dir').getAttribute('aria-pressed')==='true';
+      const q = (document.getElementById('jobs-search').value || '').toLowerCase();
+      const sortKey = document.getElementById('jobs-sort').value;
+      const desc    = document.getElementById('jobs-dir').getAttribute('aria-pressed') === 'true';
 
-      let arr = app.data.jobs.filter(j=> (!q || j.title.toLowerCase().includes(q) || j.company.toLowerCase().includes(q)));
-      arr.sort((a,b)=>{
+      let arr = app.data.jobs.filter(j => (!q || j.title.toLowerCase().includes(q) || j.company.toLowerCase().includes(q)));
+      arr.sort((a,b) => {
         let v = 0;
-        if(sortKey==='deadline') v = new Date(a.deadline)-new Date(b.deadline);
-        else if(sortKey==='sum') v = a.sum-b.sum;
+        if (sortKey==='deadline') v = new Date(a.deadline) - new Date(b.deadline);
+        else if (sortKey==='sum') v = a.sum - b.sum;
         else v = (''+a.title).localeCompare(b.title);
         return desc ? -v : v;
       });
 
-      document.getElementById('jobs-count').textContent=String(arr.length);
-      const list=document.getElementById('jobs-list'); list.innerHTML='';
-      arr.forEach(j=>{
-        const el=document.createElement('article'); el.className='card';
-        el.innerHTML=`
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
-            <div class="chip">${j.cat||'—'}</div>
-            <div class="muted">Дедлайн: ${j.deadline||'—'}</div>
-          </div>
+      document.getElementById('jobs-count').textContent = String(arr.length);
+      const list = document.getElementById('jobs-list'); list.innerHTML = '';
+      arr.forEach(j => {
+        const el = document.createElement('article'); el.className = 'card';
+        el.innerHTML = `
+          <div class="chip">${j.cat || '—'}</div>
           <h3>${j.title}</h3>
-          <div class="muted">${j.company||'—'}</div>
-          <div class="price">${j.sum? new Intl.NumberFormat('ru-RU').format(j.sum)+' ₸':'—'}</div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button class="btn btn--ghost">Откликнуться</button>
-            <button class="btn btn--subtle">Сохранить</button>
-          </div>`;
-        el.querySelector('.btn').addEventListener('click', ()=>{
-          if(!app.user){ openModal(modalLogin); return; }
-          toast('Отклик отправлен (демо)');
+          <div class="muted">${j.company || '—'}</div>
+          <div class="muted">Дедлайн: ${j.deadline || '—'}</div>
+          <div class="price">${j.sum ? new Intl.NumberFormat('ru-RU').format(j.sum)+' ₸' : '—'}</div>
+          <button class="btn btn--ghost">Откликнуться</button>
+        `;
+        el.querySelector('button').addEventListener('click', () => {
+          if (!app.user){ openModal(modalLogin); return; }
+          alert('Отклик отправлен (демо)');
         });
-        el.querySelector('.btn--subtle').addEventListener('click', ()=> toast('Сохранено'));
         list.appendChild(el); revealIO.observe(el);
       });
     }
-    document.getElementById('jobs-dir').addEventListener('click', e=>{ toggleDir(e.currentTarget); renderJobs(); });
-    ['jobs-search','jobs-sort'].forEach(id=> document.getElementById(id).addEventListener('input', renderJobs));
-    document.getElementById('jobs-more').addEventListener('click', ()=> toast('Загружены все вакансии'));
+    document.getElementById('jobs-dir').addEventListener('click', (e) => { toggleDir(e.currentTarget); renderJobs(); });
+    ['jobs-search','jobs-sort'].forEach(id => document.getElementById(id).addEventListener('input', renderJobs));
 
-    /* ===================== GRANTS ===================== */
     async function loadGrants(){
-      skeletonCards('grants-list', 6);
       const rows = await fetchSheet(CONFIG.sheets.grants);
-      app.data.grants = rows.map(r=>({
+      app.data.grants = rows.map(r => ({
         id: crypto.randomUUID(),
-        title: r['название']||'',
-        company: r['компания']||'',
-        sum: Number(r['сумма']||0),
-        deadline: r['дедлайн']||'',
-        req: r['требования']||''
+        title:    r['название'] || '',
+        company:  r['компания'] || '',
+        sum:      Number(r['сумма'] || 0),
+        deadline: r['дедлайн'] || '',
+        req:      r['требования'] || ''
       }));
-
       document.getElementById('grants-sort').value = 'sum';
       renderGrants();
     }
     function renderGrants(){
-      const q=(document.getElementById('grants-search').value||'').toLowerCase();
-      const sortKey=document.getElementById('grants-sort').value;
-      const desc=document.getElementById('grants-dir').getAttribute('aria-pressed')==='true';
+      const q = (document.getElementById('grants-search').value || '').toLowerCase();
+      const sortKey = document.getElementById('grants-sort').value;
+      const desc    = document.getElementById('grants-dir').getAttribute('aria-pressed') === 'true';
 
-      let arr = app.data.grants.filter(g=> (!q || g.title.toLowerCase().includes(q) || g.company.toLowerCase().includes(q)));
-      arr.sort((a,b)=>{
-        let v=0;
-        if(sortKey==='deadline') v = new Date(a.deadline)-new Date(b.deadline);
-        else if(sortKey==='sum') v = a.sum-b.sum;
+      let arr = app.data.grants.filter(g => (!q || g.title.toLowerCase().includes(q) || g.company.toLowerCase().includes(q)));
+      arr.sort((a,b) => {
+        let v = 0;
+        if (sortKey==='deadline') v = new Date(a.deadline) - new Date(b.deadline);
+        else if (sortKey==='sum') v = a.sum - b.sum;
         else v = (''+a.title).localeCompare(b.title);
         return desc ? -v : v;
       });
 
-      document.getElementById('grants-count').textContent=String(arr.length);
-      const list=document.getElementById('grants-list'); list.innerHTML='';
-      arr.forEach(g=>{
-        const el=document.createElement('article'); el.className='card';
-        el.innerHTML=`
+      document.getElementById('grants-count').textContent = String(arr.length);
+      const list = document.getElementById('grants-list'); list.innerHTML = '';
+      arr.forEach(g => {
+        const el = document.createElement('article'); el.className = 'card';
+        el.innerHTML = `
           <h3>${g.title}</h3>
-          <div class="muted">${g.company||'—'}</div>
-          <div class="price">${g.sum? new Intl.NumberFormat('ru-RU').format(g.sum)+' ₸':'—'}</div>
-          <div class="muted">Дедлайн: ${g.deadline||'—'}</div>
-          <div class="muted">${g.req||''}</div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button class="btn btn--ghost">Подать</button>
-            <button class="btn btn--subtle">Сохранить</button>
-          </div>`;
-        el.querySelector('.btn').addEventListener('click', ()=>{
-          if(!app.user){ openModal(modalLogin); return; }
-          toast('Заявка отправлена (демо)');
+          <div class="muted">${g.company || '—'}</div>
+          <div class="price">${g.sum ? new Intl.NumberFormat('ru-RU').format(g.sum)+' ₸' : '—'}</div>
+          <div class="muted">Дедлайн: ${g.deadline || '—'}</div>
+          <div class="muted">${g.req || ''}</div>
+          <button class="btn btn--ghost">Подать</button>
+        `;
+        el.querySelector('button').addEventListener('click', () => {
+          if (!app.user){ openModal(modalLogin); return; }
+          alert('Заявка отправлена (демо)');
         });
-        el.querySelector('.btn--subtle').addEventListener('click', ()=> toast('Сохранено'));
         list.appendChild(el); revealIO.observe(el);
       });
     }
-    document.getElementById('grants-dir').addEventListener('click', e=>{ toggleDir(e.currentTarget); renderGrants(); });
-    ['grants-search','grants-sort'].forEach(id=> document.getElementById(id).addEventListener('input', renderGrants));
-    document.getElementById('grants-more').addEventListener('click', ()=> toast('Загружены все гранты'));
+    document.getElementById('grants-dir').addEventListener('click', (e) => { toggleDir(e.currentTarget); renderGrants(); });
+    ['grants-search','grants-sort'].forEach(id => document.getElementById(id).addEventListener('input', renderGrants));
 
-    /* ===================== SUPPORT ===================== */
     async function loadSupport(){
-      skeletonCards('support-list', 4);
       const rows = await fetchSheet(CONFIG.sheets.support);
-      app.data.support = rows.map(r=>({
-        expert: r['эксперт']||'',
-        desc: r['описание']||'',
-        contact: r['связаться']||''
+      app.data.support = rows.map(r => ({
+        expert:  r['эксперт']    || '',
+        desc:    r['описание']   || '',
+        contact: r['связаться']  || ''
       }));
-      const list=document.getElementById('support-list'); list.innerHTML='';
-      app.data.support.forEach(s=>{
-        const el=document.createElement('article'); el.className='card';
-        el.innerHTML=`<div class="chip">${s.expert||'—'}</div><div class="muted">${s.desc||''}</div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
-            <button class="btn btn--ghost">Связаться</button>
-          </div>`;
-        el.querySelector('button').addEventListener('click', ()=>{
-          if(s.contact.startsWith('@')) location.href='https://t.me/'+s.contact.slice(1);
-          else if(s.contact.replace(/\D/g,'').length>=10) location.href='https://wa.me/'+s.contact.replace(/\D/g,'');
-          else if(s.contact) location.href=s.contact;
+      const list = document.getElementById('support-list'); list.innerHTML = '';
+      app.data.support.forEach(s => {
+        const el = document.createElement('article'); el.className = 'card';
+        el.innerHTML = `
+          <div class="chip">${s.expert || '—'}</div>
+          <div>${s.desc || ''}</div>
+          <button class="btn btn--ghost">Связаться</button>
+        `;
+        el.querySelector('button').addEventListener('click', () => {
+          if (s.contact.startsWith('@')) location.href = 'https://t.me/' + s.contact.slice(1);
+          else if (s.contact.replace(/\D/g,'').length >= 10) location.href = 'https://wa.me/' + s.contact.replace(/\D/g,'');
+          else if (s.contact) location.href = s.contact;
         });
         list.appendChild(el); revealIO.observe(el);
       });
     }
 
-    /* DIR buttons */
-    document.getElementById('market-dir').addEventListener('click', e=>{ toggleDir(e.currentTarget); renderMarket(); });
-    document.getElementById('jobs-dir').addEventListener('click', e=>{ toggleDir(e.currentTarget); renderJobs(); });
-    document.getElementById('grants-dir').addEventListener('click', e=>{ toggleDir(e.currentTarget); renderGrants(); });
-
-    /* INIT */
+    /* ===================== INIT ===================== */
     (async function init(){
-      onScroll(); // set initial progress/toTop
-      // initial skeletons
-      skeletonCards('courses-list', 6);
-      skeletonCards('market-list', 6);
-      skeletonCards('jobs-list', 6);
-      skeletonCards('grants-list', 6);
-      skeletonCards('support-list', 4);
+      // counters only on public sections
+      document.querySelectorAll('[data-counter]').forEach(el => counterIO.observe(el));
 
       await initAuth();
-      await Promise.all([loadCourses(), loadMarket(), loadJobs(), loadGrants(), loadSupport()]);
+
+      // reveal animations for all cards already in DOM
+      document.querySelectorAll('.card').forEach(card => revealIO.observe(card));
+
+      // load private data (they will render only when authed)
+      await Promise.all([ loadCourses(), loadMarket(), loadJobs(), loadGrants(), loadSupport() ]);
     })();
+
+    // закрыть по клику на кнопку "Отмена"
+document.querySelector('#modal-login [data-close]')?.addEventListener('click', () => {
+  closeModal(modalLogin);
+});
+
+// закрыть по клику по фону
+modalLogin.addEventListener('click', (e) => {
+  if (e.target === modalLogin) closeModal(modalLogin);
+});
+
+// закрыть по Esc (для <dialog> это событие 'cancel')
+modalLogin.addEventListener('cancel', (e) => {
+  e.preventDefault(); // чтобы не было дефолтной анимации, если не нужна
+  closeModal(modalLogin);
+});
   </script>
 </body>
 </html>
