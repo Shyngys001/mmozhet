@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Арманым сен — Аккордтармен</title>
+  <style>
+    :root{
+      --bg:#0b0b12;--card:#111423;--text:#e9ecf4;--muted:#aab3c6;--accent:#6aa9ff;--chip:#1b2240;--radius:14px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;background:radial-gradient(1200px 800px at 20% 0%,#152042 0,#0b0b12 45%),var(--bg);color:var(--text);line-height:1.75;}
+    .wrap{max-width:980px;margin:28px auto;padding:20px}
+    header{display:flex;gap:12px;justify-content:space-between;align-items:center;margin-bottom:16px}
+    h1{font-size:24px;font-weight:800;letter-spacing:.3px}
+    .controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+    .control{background:var(--card);border:1px solid #1e2340;border-radius:var(--radius);padding:8px 12px;color:var(--text)}
+    select,button{background:#0e1531;border:1px solid #283259;color:var(--text);padding:8px 10px;border-radius:10px}
+    .card{background:rgba(17,20,35,.7);border:1px solid #222a4f;backdrop-filter: blur(8px);border-radius:var(--radius);padding:18px 16px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+    .progression{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 18px}
+    .chip{background:var(--chip);border:1px solid #2a3260;color:#dbe6ff;padding:6px 10px;border-radius:10px;font-weight:700}
+    .section{margin:18px 0}
+    .section h3{font-size:13px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
+    .line{display:flex;gap:10px;align-items:flex-start;margin:2px 0}
+    .ch{min-width:62px;font-weight:800;color:#bcd7ff;text-shadow:0 0 8px #2748ff}
+    .lyr{white-space:pre-wrap}
+    footer{opacity:.7;margin-top:18px;font-size:12px}
+    .kbd{font-family:ui-monospace,Consolas,monospace;background:#0b1230;border:1px solid #283259;border-radius:8px;padding:2px 6px}
+    @media (max-width:640px){.ch{min-width:48px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Арманым сен — аккордтармен</h1>
+      <div class="controls">
+        <label class="control">Тональность: 
+          <select id="transpose">
+            <option value="0">Bm (ориг.)</option>
+            <option value="-2">Am</option>
+            <option value="-1">Bbm</option>
+            <option value="1">Cm</option>
+            <option value="2">C#m</option>
+            <option value="3">Dm</option>
+            <option value="4">D#m</option>
+            <option value="5">Em</option>
+            <option value="7">F#m</option>
+            <option value="9">G#m</option>
+            <option value="10">Am (каподастр II)</option>
+          </select>
+        </label>
+        <button id="copyBtn" title="Көшіру"><span>Текст + аккордтарды көшіру</span></button>
+      </div>
+    </header>
+
+    <div class="card">
+      <div class="section">
+        <h3>Intro</h3>
+        <div class="progression" id="intro">
+          <span class="chip chrd">Bm</span><span class="chip chrd">G</span><span class="chip chrd">F#</span>
+          <span class="chip chrd">Bm</span><span class="chip chrd">A</span><span class="chip chrd">Bm</span>
+          <span class="chip chrd">D</span><span class="chip chrd">A</span><span class="chip chrd">D</span><span class="chip chrd">F#</span>
+          <span class="chip chrd">G</span><span class="chip chrd">A</span><span class="chip chrd">Bm</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Verse 1</h3>
+        <div class="line"><div class="ch chrd">Bm  A</div><div class="lyr">Менің армандаған ойларымның</div></div>
+        <div class="line"><div class="ch chrd">G   A   D</div><div class="lyr">Жиынтығы болған аруым</div></div>
+        <div class="line"><div class="ch chrd">G   A   D</div><div class="lyr">Жан-тәніммен мен саған зәрумін</div></div>
+        <div class="line"><div class="ch chrd">G       F#</div><div class="lyr">Күші жетпес емдеуге дәрінің</div></div>
+      </div>
+
+      <div class="section">
+        <h3>Verse 2</h3>
+        <div class="line"><div class="ch chrd">Bm  A</div><div class="lyr">Арманым — сенің мендік болуың</div></div>
+        <div class="line"><div class="ch chrd">G    A     D</div><div class="lyr">Бақ құсым боп қолға қонуың</div></div>
+        <div class="line"><div class="ch chrd">G    A     D</div><div class="lyr">Сенімді серігім боп жүруің</div></div>
+        <div class="line"><div class="ch chrd">G    A     Bm</div><div class="lyr">Іштегі от сезімімді көруің</div></div>
+      </div>
+
+      <div class="section">
+        <h3>Pre-chorus</h3>
+        <div class="line"><div class="ch chrd">Bm  A   Bm</div><div class="lyr">Түннің тұнығындай</div></div>
+        <div class="line"><div class="ch chrd">G       A    Bm</div><div class="lyr">Қыс ауасының суығындай</div></div>
+        <div class="line"><div class="ch chrd">G    A     Bm</div><div class="lyr">Жалындай жанған жанымды емде</div></div>
+        <div class="line"><div class="ch chrd">G        F#</div><div class="lyr">Ешкімге жүрек кілтін берме</div></div>
+      </div>
+
+      <div class="section">
+        <h3>Chorus</h3>
+        <div class="line"><div class="ch chrd">G     A      D</div><div class="lyr">Сені қатты сағынған күндері</div></div>
+        <div class="line"><div class="ch chrd">G       A        D</div><div class="lyr">Сенсіз қатты қиналған кездерім</div></div>
+        <div class="line"><div class="ch chrd">G      A      Bm</div><div class="lyr">«Мен сені сүйем» деген сөздерім ернімде</div></div>
+        <div class="line"><div class="ch chrd">G      A        Bm</div><div class="lyr">Тағы да жасаурайды жүрегім</div></div>
+        <div class="line"><div class="ch chrd">G        A        Bm</div><div class="lyr">Сені әлі сағынады — білемін</div></div>
+        <div class="line"><div class="ch chrd">G        A         Bm</div><div class="lyr">Жаным, сүйем, сені әлі күтемін</div></div>
+      </div>
+
+      <div class="section">
+        <h3>Outro</h3>
+        <div class="progression" id="outro">
+          <span class="chip chrd">Bm</span><span class="chip chrd">G</span><span class="chip chrd">F#</span>
+          <span class="chip chrd">Bm</span><span class="chip chrd">A</span><span class="chip chrd">Bm</span>
+          <span class="chip chrd">F#</span><span class="chip chrd">G</span><span class="chip chrd">F#</span><span class="chip chrd">Bm</span>
+        </div>
+      </div>
+      <footer>
+        Кеңес: транспозицияны өзгерту үшін пернетақтадан <span class="kbd">[</span>/<span class="kbd">]</span> басыңыз.
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    // --- Транспонирование ---
+    const NOTES = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
+    const FLAT_MAP = {"Db":"C#","Eb":"D#","Gb":"F#","Ab":"G#","Bb":"A#"};
+
+    function splitChord(ch){
+      // e.g., F#m7b5 -> root F#, quality m7b5
+      const m = ch.match(/^([A-G](?:#|b)?)(.*)$/);
+      return m ? {root: FLAT_MAP[m[1]]||m[1], qual:m[2]||""} : {root:ch, qual:""};
+    }
+
+    function transposeChord(ch, steps){
+      if(!ch || ch==='—' || ch==='-') return ch;
+      const {root,qual} = splitChord(ch);
+      const i = NOTES.indexOf(root);
+      if(i<0) return ch;
+      let ni = (i + steps + 120) % 12;
+      return NOTES[ni] + qual;
+    }
+
+    function transposeAll(steps){
+      document.querySelectorAll('.chrd').forEach(el=>{
+        const orig = el.getAttribute('data-orig') || el.textContent.trim();
+        el.setAttribute('data-orig', orig);
+        el.textContent = orig.split(/\s+/).map(tok=>transposeChord(tok, steps)).join(' ');
+      });
+    }
+
+    const select = document.getElementById('transpose');
+    select.addEventListener('change', e=> transposeAll(parseInt(e.target.value,10)) );
+
+    // keyboard shortcuts [ ]
+    window.addEventListener('keydown', (e)=>{
+      if(e.key==='['){ select.selectedIndex = Math.max(0, select.selectedIndex-1); select.dispatchEvent(new Event('change')); }
+      if(e.key===']'){ select.selectedIndex = Math.min(select.options.length-1, select.selectedIndex+1); select.dispatchEvent(new Event('change')); }
+    });
+
+    // copy
+    document.getElementById('copyBtn').addEventListener('click', ()=>{
+      let txt = '';
+      document.querySelectorAll('.section').forEach(sec=>{
+        const title = sec.querySelector('h3')?.textContent?.trim() || '';
+        if(title) txt += `\n${title}\n`;
+        sec.querySelectorAll('.line').forEach(line=>{
+          const ch = line.querySelector('.ch')?.textContent?.trim() || '';
+          const ly = line.querySelector('.lyr')?.textContent?.trim() || '';
+          txt += `${ch}\t${ly}\n`;
+        });
+        sec.querySelectorAll('.chip.chrd').forEach(c=>{ txt += c.textContent+ ' '; });
+        if(sec.querySelector('.chip')) txt += '\n';
+      });
+      navigator.clipboard.writeText(txt.trim()).then(()=>{
+        const btn = document.getElementById('copyBtn');
+        const prev = btn.textContent; btn.textContent='Көшірілді!';
+        setTimeout(()=>btn.textContent=prev,1200);
+      });
+    });
+  </script>
+</body>
+</html>
+
+
