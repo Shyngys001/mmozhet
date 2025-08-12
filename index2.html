@@ -27,6 +27,21 @@
     footer{opacity:.7;margin-top:18px;font-size:12px}
     .kbd{font-family:ui-monospace,Consolas,monospace;background:#0b1230;border:1px solid #283259;border-radius:8px;padding:2px 6px}
     @media (max-width:640px){.ch{min-width:48px}}
+
+    /* ===== Popover (аккорд-диаграмма) ===== */
+.chx, .chip.chrd{cursor:pointer;position:relative}
+.popover{
+  position:fixed;z-index:9999;background:#1b1f34;border:1px solid #2b3157;
+  box-shadow:0 14px 40px rgba(0,0,0,.45);border-radius:14px;min-width:220px;padding:12px
+}
+.popover h4{margin:0 0 8px;font-size:16px;color:#ffd8f2}
+.fret-wrap{display:flex;gap:8px}
+.strings{display:flex;flex-direction:column;justify-content:space-between;font-size:10px;color:#9fb0ff;opacity:.9;padding-right:4px}
+.fret svg{display:block}
+.pop-foot{display:flex;justify-content:space-between;align-items:center;margin-top:8px;color:#9fb0ff;font-size:12px}
+.pop-close{background:none;border:none;color:#9fb0ff;cursor:pointer}
+.pop-title{display:flex;gap:6px;align-items:baseline}
+.badge{font-size:11px;color:#b3c4ff}
   </style>
 </head>
 <body>
@@ -136,7 +151,13 @@
       document.querySelectorAll('.chrd').forEach(el=>{
         const orig = el.getAttribute('data-orig') || el.textContent.trim();
         el.setAttribute('data-orig', orig);
-        el.textContent = orig.split(/\s+/).map(tok=>transposeChord(tok, steps)).join(' ');
+        // делаем каждый аккорд кликабельным
+        el.innerHTML = orig.split(/\s+/)
+          .map(tok => {
+            const t = transposeChord(tok, steps);
+            return `<span class="chx" data-chord="${t}">${t}</span>`;
+          })
+          .join(' ');
       });
     }
 
@@ -169,8 +190,112 @@
         setTimeout(()=>btn.textContent=prev,1200);
       });
     });
+
+
+    // ===== Библиотека форм аккордов (стандартные аппликатуры) =====
+// Массив 6 струн: E A D G B e; число=лад, 0=открытая, -1=глушим
+const CHORD_SHAPES = {
+  // Majors
+  'A':[-1,0,2,2,2,0], 'Bb':[-1,1,3,3,3,1], 'A#':[-1,1,3,3,3,1],
+  'B':[-1,2,4,4,4,2], 'C':[-1,3,2,0,1,0],
+  'C#':[-1,4,6,6,6,4], 'Db':[-1,4,6,6,6,4],
+  'D':[-1,-1,0,2,3,2], 'D#':[-1,-1,1,3,4,3], 'Eb':[-1,-1,1,3,4,3],
+  'E':[0,2,2,1,0,0], 'F':[1,3,3,2,1,1],
+  'F#':[2,4,4,3,2,2], 'Gb':[2,4,4,3,2,2],
+  'G':[3,2,0,0,0,3], 'G#':[4,6,6,5,4,4], 'Ab':[4,6,6,5,4,4],
+  // Minors
+  'Am':[-1,0,2,2,1,0], 'A#m':[-1,1,3,3,2,1], 'Bbm':[-1,1,3,3,2,1],
+  'Bm':[-1,2,4,4,3,2], 'Cm':[-1,3,5,5,4,3],
+  'C#m':[-1,4,6,6,5,4], 'Dbm':[-1,4,6,6,5,4],
+  'Dm':[-1,-1,0,2,3,1], 'D#m':[-1,-1,1,3,4,2], 'Ebm':[-1,-1,1,3,4,2],
+  'Em':[0,2,2,0,0,0], 'Fm':[1,3,3,1,1,1],
+  'F#m':[2,4,4,2,2,2], 'Gbm':[2,4,4,2,2,2],
+  'Gm':[3,5,5,3,3,3], 'G#m':[4,6,6,4,4,4], 'Abm':[4,6,6,4,4,4]
+};
+
+let pop;
+function encodeShape(arr){ return arr.map(v=> v<0 ? 'x' : String(v)).join(''); }
+
+function drawChord(label, arr){
+  const frets = arr.filter(v=>v>0);
+  const min = frets.length ? Math.min(...frets) : 0;
+  const max = frets.length ? Math.max(...frets) : 0;
+  const start = min>1 ? min : 1;
+  const span = Math.max(4, max-start+1);
+
+  const w=140,h=170,left=8,top=18,right=8,bottom=12;
+  const gridW=w-left-right, gridH=h-top-bottom;
+  const dx=gridW/5, dy=gridH/span;
+
+  let svg = `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg">`;
+  svg += `<rect x="0" y="0" width="${w}" height="${h}" rx="12" fill="#0f1330" stroke="#202858"/>`;
+
+  for(let s=0;s<6;s++){ const x=left+s*dx;
+    svg += `<line x1="${x}" y1="${top}" x2="${x}" y2="${top+gridH}" stroke="#44508a" stroke-width="1"/>`;
+  }
+  for(let f=0; f<=span; f++){ const y=top+f*dy;
+    const thick=(start===1 && f===0)?3:1.5;
+    svg += `<line x1="${left}" y1="${y}" x2="${left+gridW}" y2="${y}" stroke="#44508a" stroke-width="${thick}"/>`;
+  }
+  arr.forEach((v, i)=>{
+    const x=left+i*dx;
+    if(v===0) svg += `<circle cx="${x}" cy="${top-8}" r="5" fill="none" stroke="#ffd8f2" stroke-width="2"/>`;
+    else if(v<0) svg += `<text x="${x-4}" y="${top-6}" fill="#ffd8f2" font-size="12">x</text>`;
+    else{
+      const fret=v-start+1, y=top+fret*dy-dy/2;
+      svg += `<circle cx="${x}" cy="${y}" r="8" fill="#f58ad6"/>`;
+    }
+  });
+  if(start>1){
+    svg += `<rect x="${w-34}" y="6" rx="6" width="28" height="16" fill="#1b2240" stroke="#2a3260"/>`;
+    svg += `<text x="${w-21}" y="18" fill="#b3c4ff" font-size="12" text-anchor="middle">${start}</text>`;
+  }
+  svg += `</svg>`;
+  return svg;
+}
+
+function openPopover(chord, x, y){
+  const shape = CHORD_SHAPES[chord];
+  if(!shape) return;
+  if(!pop){ pop = document.createElement('div'); pop.className='popover'; document.body.appendChild(pop); }
+  pop.innerHTML = `
+    <div class="pop-title"><h4>${chord}</h4><span class="badge">${encodeShape(shape)}</span></div>
+    <div class="fret-wrap">
+      <div class="strings"><span>E</span><span>A</span><span>D</span><span>G</span><span>B</span><span>e</span></div>
+      <div class="fret">${drawChord(chord, shape)}</div>
+    </div>
+    <div class="pop-foot"><span>Негізгі аппликатура</span><button class="pop-close">Жабу</button></div>
+  `;
+  const px = Math.min(window.innerWidth-260, Math.max(12, x+12));
+  const py = Math.min(window.innerHeight-260, Math.max(12, y-20));
+  pop.style.left = px+'px'; pop.style.top = py+'px';
+  pop.querySelector('.pop-close').onclick = closePopover;
+  window.addEventListener('keydown', escClose);
+}
+function closePopover(){ if(pop){ pop.remove(); pop=null; window.removeEventListener('keydown', escClose);} }
+function escClose(e){ if(e.key==='Escape') closePopover(); }
+
+// оборачиваем все аккорды в кликабельные спаны при загрузке
+function wrapInlineChords(){
+  document.querySelectorAll('.chrd').forEach(el=>{
+    const text = el.textContent.trim();
+    el.innerHTML = text.split(/\s+/)
+      .map(tok => `<span class="chx" data-chord="${tok}">${tok}</span>`).join(' ');
+  });
+}
+wrapInlineChords();
+
+// клик по аккорду
+document.addEventListener('click', (e)=>{
+  const btn = e.target.closest('.chx, .chip.chrd');
+  if(btn){
+    const chord = (btn.dataset.chord||btn.textContent).trim();
+    const r = btn.getBoundingClientRect();
+    openPopover(chord, r.left + r.width/2, r.top + window.scrollY + r.height + 8);
+  } else if(!e.target.closest('.popover')){
+    closePopover();
+  }
+});
   </script>
 </body>
 </html>
-
-
