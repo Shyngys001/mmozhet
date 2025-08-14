@@ -980,7 +980,7 @@
 
     /* предустановленная высота хедера и защита от «выпираний» */
     :root{--header-height:70px}
-    header{height:var(--header-height);overflow:hidden}
+    header{height:var(--header-height);overflow:visible}
 
     /* ---------- МОБИЛЬНАЯ ШАПКА: только бургер ---------- */
     @media (max-width: 920px){
@@ -1142,6 +1142,12 @@
       .site-footer .wrap{ grid-template-columns: 1fr; padding:28px 16px; }
       .footer-bar .bar-wrap{ flex-direction:column; align-items:flex-start; gap:8px; }
     }
+
+    .lang-btn.is-active{
+  background: var(--primary);
+  color:#fff;
+  box-shadow: 0 0 0 3px rgba(122,60,255,.15);
+}
   </style>
 </head>
 <body>
@@ -1842,23 +1848,21 @@
       document.getElementById('current-lang').textContent = langNames[lang];
       
       // Обновляем активный язык в выдвижном меню
-      document.querySelectorAll('.drawer-lang-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.lang === lang);
-      });
+      document.querySelectorAll('.lang-option').forEach(opt => {
+        opt.classList.toggle('active', opt.dataset.lang === lang);
+        });
       
       // Обновляем все тексты на странице
       document.querySelectorAll('[data-translate]').forEach(element => {
         const key = element.getAttribute('data-translate');
         const translation = translations[lang][key] || translations['kk'][key];
-        if (translation) {
-          if (element.tagName === 'INPUT' || element.tagName === 'SELECT') {
-            element.placeholder = translation;
-          } else if (element.tagName === 'OPTION') {
-            element.textContent = translation;
-          } else {
-            element.textContent = translation;
-          }
-        }
+        if (element.tagName === 'INPUT') {
+            element.placeholder = translation;           // инпуты — плейсхолдер
+            } else if (element.tagName === 'OPTION') {
+            element.textContent = translation;           // опции селектов — текст
+            } else {
+            element.textContent = translation;           // всё остальное — текст
+            }
       });
       
       // Обновляем динамические элементы
@@ -2331,6 +2335,48 @@
       e.preventDefault(); // чтобы не было дефолтной анимации, если не нужна
       closeModal(modalLogin);
     });
+
+    // ДОбавь в translations.kk
+Object.assign(translations.kk, {
+  duration_weeks: "апт",
+  free: "Тегін",
+  details: "Толығырақ",
+  no_info: "Ақпарат кейінірек жарияланады",
+  contact: "Байланысу",
+  no_contact: "Байланыс көрсетілмеген",
+  deadline: "Дедлайн",
+  apply: "Өтініш беру",
+  applied: "Өтініш жіберілді (демо)",
+  submitted: "Өтініш жіберілді (демо)",
+});
+
+// ДОбавь в translations.ru
+Object.assign(translations.ru, {
+  duration_weeks: "нед",
+  free: "Бесплатно",
+  details: "Подробнее",
+  no_info: "Информация появится позже",
+  contact: "Связаться",
+  no_contact: "Контакт не указан",
+  deadline: "Дедлайн",
+  apply: "Откликнуться",
+  applied: "Отклик отправлен (демо)",
+  submitted: "Заявка отправлена (демо)",
+});
+
+// ДОбавь в translations.en
+Object.assign(translations.en, {
+  duration_weeks: "wk",
+  free: "Free",
+  details: "Details",
+  no_info: "Info will appear later",
+  contact: "Contact",
+  no_contact: "No contact provided",
+  deadline: "Deadline",
+  apply: "Apply",
+  applied: "Applied (demo)",
+  submitted: "Submitted (demo)",
+});
   </script>
 </body>
 </html>
