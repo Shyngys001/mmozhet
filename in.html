@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="kk">
+<html lang="ru">
 <head>
   <link rel="icon" type="image/svg+xml" href="logo.svg">
   <meta charset="UTF-8" />
@@ -271,63 +271,6 @@
       font-weight: 500;
     }
 
-    .lang-switcher {
-      position: relative;
-      margin-left: 8px;
-    }
-
-    .lang-btn {
-      background: var(--primary-weak);
-      color: var(--primary);
-      border-radius: 10px;
-      padding: 6px 12px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      transition: all 0.2s;
-    }
-
-    .lang-btn:hover {
-      background: var(--primary);
-      color: #fff;
-    }
-
-    .lang-dropdown {
-      position: absolute;
-      top: 100%;
-      right: 0;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: var(--shadow);
-      padding: 8px;
-      min-width: 100px;
-      z-index: 10;
-      display: none;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .lang-switcher:hover .lang-dropdown {
-      display: flex;
-    }
-
-    .lang-option {
-      padding: 8px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .lang-option:hover {
-      background: var(--primary-weak);
-    }
-
-    .lang-option.active {
-      background: var(--primary);
-      color: #fff;
-    }
-
     .burger {
       display: none;
       --size: 42px;
@@ -422,6 +365,7 @@
       margin-top: 10px;
     }
     
+    /* Добавленные стили для блока пользователя в drawer */
     .drawer-user {
       display: flex;
       align-items: center;
@@ -444,28 +388,6 @@
     .drawer-user__role {
       font-size: 0.85rem;
       color: var(--muted);
-    }
-
-    .drawer-lang {
-      display: flex;
-      gap: 8px;
-      padding: 10px 16px;
-      border-bottom: 1px solid #eee;
-      margin-bottom: 10px;
-    }
-
-    .drawer-lang-btn {
-      background: var(--primary-weak);
-      color: var(--primary);
-      border-radius: 8px;
-      padding: 6px 12px;
-      font-size: 0.9rem;
-      transition: all 0.2s;
-    }
-
-    .drawer-lang-btn:hover, .drawer-lang-btn.active {
-      background: var(--primary);
-      color: #fff;
     }
 
     /* =========================================================
@@ -832,10 +754,6 @@
         padding: 8px 12px;
         font-size: 0.85rem;
       }
-      
-      .lang-switcher {
-        display: none;
-      }
     }
 
     @media (max-width: 768px) {
@@ -970,184 +888,310 @@
       overflow: hidden;
     }
 
+
     /* --- жёстко запрещаем перенос контента в шапке --- */
-    .nav{display:flex;align-items:center;gap:16px;flex-wrap:nowrap}
-    .brand{min-width:0}                    /* чтобы text-ellipsis работал */
-    .brand__text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav{display:flex;align-items:center;gap:16px;flex-wrap:nowrap}
+.brand{min-width:0}                    /* чтобы text-ellipsis работал */
+.brand__text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-    /* фикс правой группы, чтобы ничего не давило бургер */
-    .nav__actions{margin-left:auto;display:flex;align-items:center;gap:10px;min-width:0}
+/* фикс правой группы, чтобы ничего не давило бургер */
+.nav__actions{margin-left:auto;display:flex;align-items:center;gap:10px;min-width:0}
 
-    /* предустановленная высота хедера и защита от «выпираний» */
-    :root{--header-height:70px}
-    header{height:var(--header-height);overflow:visible}
+/* предустановленная высота хедера и защита от «выпираний» */
+:root{--header-height:70px}
+header{height:var(--header-height);overflow:hidden}
 
-    /* ---------- МОБИЛЬНАЯ ШАПКА: только бургер ---------- */
-    @media (max-width: 920px){
-      /* скрываем любые линк‑навы (и public, и private) */
-      .nav__links{display:none !important}
+/* ---------- МОБИЛЬНАЯ ШАПКА: только бургер ---------- */
+@media (max-width: 920px){
+  /* скрываем любые линк‑навы (и public, и private) */
+  .nav__links{display:none !important}
 
-      /* скрываем дропдаун пользователя и кнопки входа в шапке —
-         они есть в drawer */
-      .nav__actions .btn,
-      .nav__actions details.user{display:none !important}
+  /* скрываем дропдаун пользователя и кнопки входа в шапке —
+     они есть в drawer */
+  .nav__actions .btn,
+  .nav__actions details.user{display:none !important}
 
-      /* показываем бургер; он один остаётся справа */
-      .burger{display:flex}
+  /* показываем бургер; он один остаётся справа */
+  .burger{display:flex}
 
-      /* делаем шапку компактнее */
-      :root{--header-height:60px}
-      header{height:var(--header-height)}
-      .nav{gap:10px}
-      .brand__logo{width:32px;height:32px}
-      /* хэштег убираем — экономим место */
-      .brand__text .muted{display:none}
-    }
-
-    /* сверхкомпактный режим для узких экранов */
-    @media (max-width: 420px){
-      .brand__text{font-size:0.98rem}
-    }
-
-    /* ===== Modal: общие мелкие улучшения ===== */
-    .modal::backdrop {                     /* нативный затемнитель для <dialog> */
-      background: rgba(15, 9, 34, 0.42);
-    }
-    .modal__dialog {
-      max-height: 90vh;
-      overflow: auto;
-    }
-
-    /* ===== Mobile bottom‑sheet версия модалки входа ===== */
-    @media (max-width: 560px){
-      .modal {                             /* прижимаем к низу экрана */
-        align-items: flex-end;
-        padding: 0;
-      }
-
-      .modal__dialog {
-        width: 100vw;                      /* на всю ширину */
-        border-radius: 20px 20px 0 0;      /* как нижний лист */
-        padding: 16px 16px 12px;
-        box-shadow: 0 -16px 40px rgba(18,6,43,.18);
-        animation: sheetUp .18s ease;      /* мягкий слайд‑ап */
-      }
-
-      .modal__title {
-        font-size: 20px;
-        margin: 0 0 12px;
-      }
-
-      .row { gap: 10px; }
-      .input { padding: 14px 14px; font-size: 16px; } /* без зума на iOS */
-
-      .form__actions {                     /* кнопки в две колонки */
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        margin-top: 4px;
-      }
-      .form__actions .btn { width: 100%; padding: 12px; }
-
-      @keyframes sheetUp {
-        from { transform: translateY(12px); opacity: .96; }
-        to   { transform: translateY(0);    opacity: 1; }
-      }
-    }
-
-    /* ещё чуть компактнее на очень узких */
-    @media (max-width: 380px){
-      .modal__dialog { padding: 14px 14px 10px; }
-      .form__actions { gap: 8px; }
-    }
-
-    /* ---------- Drawer: скрывать/показывать по auth-состоянию ---------- */
-    .drawer-auth-actions{
-      display:flex; gap:10px; flex-direction:column; margin-top:10px;
-    }
-    /* когда пользователь авторизован — всё public в drawer скрываем */
-    body.authed .drawer [data-public]{display:none !important;}
-    /* и наоборот показываем приватные блоки */
-    body.authed .drawer [data-private]{display:block !important;}
-
-    /* правильное управление видимостью dialog */
-    .modal { 
-      display: none !important;         /* по умолчанию скрыто */
-      position: fixed;
-      inset: 0;
-      place-items: center;
-      padding: 24px;
-      background: rgba(15,9,34,.42);
-      z-index: 300;
-    }
-
-    .modal[open] {
-      display: flex !important;         /* показываем только когда [open] */
-      margin: 0 auto;
-      align-items: center;
-    }
-
-    /* по умолчанию все приватные блоки в drawer скрываем */
-    .drawer [data-private]{display:none !important;}
-    /* когда авторизованы — показываем */
-    body.authed .drawer [data-private]{display:block !important;}
-
-    /* конкретно user-блок: скрыт по умолчанию, видим только при auth */
-    .drawer-user{display:none;}                     /* было: display:flex */
-    body.authed .drawer-user{display:flex;}
-
-    /* ===== CLEAN FOOTER ===== */
-    .site-footer{
-      background:#0f1020; color:#e8e6ff;
-      border-top:1px solid rgba(255,255,255,.06);
-    }
-    .site-footer .wrap{
-      max-width: var(--maxw); margin:0 auto; padding:36px 20px;
-      display:grid; gap:22px;
-      grid-template-columns: 1.2fr repeat(3, minmax(160px,1fr));
-    }
-    .site-footer h4{
-      font-size:1rem; letter-spacing:.2px; margin-bottom:10px; color:#fff;
-    }
-    .site-footer a{
-      color:#b9f3f1; opacity:.9; text-decoration:none; transition:opacity .2s;
-    }
-    .site-footer a:hover{ opacity:1; }
-    .site-footer ul{ list-style:none; padding:0; margin:0; display:grid; gap:8px; }
-
-    .site-footer .brand{
-      gap:12px; font-weight:800; font-size:1.05rem; color:#fff;
-    }
-    .site-footer .brand__logo{ box-shadow:none; }
-    .site-footer .desc{ color:#bcb7e6; margin-top:6px; max-width:40ch; }
-
-    .footer-bar{
-      border-top:1px solid rgba(255,255,255,.06);
-      padding:12px 20px; color:#bcb7e6;
-    }
-    .footer-bar .bar-wrap{
-      max-width: var(--maxw); margin:0 auto; display:flex; gap:12px; align-items:center; justify-content:space-between;
-    }
-    .footer-links{ display:flex; gap:14px; flex-wrap:wrap; }
-
-    .social{ display:flex; gap:10px; margin-top:10px; }
-    .social a{ width:36px; height:36px; border:1px solid rgba(255,255,255,.12); border-radius:10px; display:grid; place-items:center; }
-    .social svg{ width:18px; height:18px; fill:#b9f3f1; }
-
-    /* responsive */
-    @media (max-width:900px){
-      .site-footer .wrap{ grid-template-columns: 1fr 1fr; }
-    }
-    @media (max-width:560px){
-      .site-footer .wrap{ grid-template-columns: 1fr; padding:28px 16px; }
-      .footer-bar .bar-wrap{ flex-direction:column; align-items:flex-start; gap:8px; }
-    }
-
-    .lang-btn.is-active{
-  background: var(--primary);
-  color:#fff;
-  box-shadow: 0 0 0 3px rgba(122,60,255,.15);
+  /* делаем шапку компактнее */
+  :root{--header-height:60px}
+  header{height:var(--header-height)}
+  .nav{gap:10px}
+  .brand__logo{width:32px;height:32px}
+  /* хэштег убираем — экономим место */
+  .brand__text .muted{display:none}
 }
+
+/* сверхкомпактный режим для узких экранов */
+@media (max-width: 420px){
+  .brand__text{font-size:0.98rem}
+}
+
+
+/* ===== Modal: общие мелкие улучшения ===== */
+.modal::backdrop {                     /* нативный затемнитель для <dialog> */
+  background: rgba(15, 9, 34, 0.42);
+}
+.modal__dialog {
+  max-height: 90vh;
+  overflow: auto;
+}
+
+/* ===== Mobile bottom‑sheet версия модалки входа ===== */
+@media (max-width: 560px){
+  .modal {                             /* прижимаем к низу экрана */
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .modal__dialog {
+    width: 100vw;                      /* на всю ширину */
+    border-radius: 20px 20px 0 0;      /* как нижний лист */
+    padding: 16px 16px 12px;
+    box-shadow: 0 -16px 40px rgba(18,6,43,.18);
+    animation: sheetUp .18s ease;      /* мягкий слайд‑ап */
+  }
+
+  .modal__title {
+    font-size: 20px;
+    margin: 0 0 12px;
+  }
+
+  .row { gap: 10px; }
+  .input { padding: 14px 14px; font-size: 16px; } /* без зума на iOS */
+
+  .form__actions {                     /* кнопки в две колонки */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .form__actions .btn { width: 100%; padding: 12px; }
+
+  @keyframes sheetUp {
+    from { transform: translateY(12px); opacity: .96; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+}
+
+/* ещё чуть компактнее на очень узких */
+@media (max-width: 380px){
+  .modal__dialog { padding: 14px 14px 10px; }
+  .form__actions { gap: 8px; }
+}
+
+
+/* ---------- Drawer: скрывать/показывать по auth-состоянию ---------- */
+.drawer-auth-actions{
+  display:flex; gap:10px; flex-direction:column; margin-top:10px;
+}
+/* когда пользователь авторизован — всё public в drawer скрываем */
+body.authed .drawer [data-public]{display:none !important;}
+/* и наоборот показываем приватные блоки */
+body.authed .drawer [data-private]{display:block !important;}
+
+/* ---------- Логин-модалка: мобильный bottom-sheet ---------- */
+.modal { display:none; place-items:center; background:rgba(15,9,34,.42); padding:20px; }
+.modal[open]{ display:grid; }
+
+.modal__dialog{
+  width:min(440px,92vw);
+  background:#fff; border-radius:18px; box-shadow:var(--shadow);
+  padding:24px; animation:pop .2s ease;
+}
+
+/* удобство ввода */
+#login-phone, #login-pass { font-size:16px; } /* без авто-зумa на iOS */
+
+.form__actions{ display:flex; gap:8px; justify-content:flex-end; }
+.form__actions .btn{ min-width:120px; }
+
+/* Моб-режим: превращаем в нижний лист */
+@media (max-width:560px){
+  .modal{ align-items:flex-end; padding:0; }
+  .modal__dialog{
+    width:100vw; max-width:none; margin:0;
+    border-radius:16px 16px 0 0;
+    padding:16px 16px 18px;
+    box-shadow:0 -12px 30px rgba(18,6,43,.18);
+    animation:sheetUp .24s ease;
+  }
+  .modal__title{ font-size:20px; margin-bottom:10px; }
+  .row{ gap:10px; }
+  .input{ padding:12px 14px; }
+  .form__actions{
+    display:grid; grid-template-columns:1fr 1fr; gap:10px; justify-content:stretch;
+  }
+  .form__actions .btn{ width:100%; }
+}
+
+/* анимация выезда снизу */
+@keyframes sheetUp{
+  from{ transform:translateY(12px); opacity:.0; }
+  to{ transform:translateY(0); opacity:1; }
+}
+
+/* ===== LOGIN MODAL — всегда по центру и аккуратно ===== */
+.modal {
+  inset: 0;
+  display: none;
+  place-items: center;                 /* по центру по вертикали и горизонтали */
+  padding: 24px;
+  background: rgba(15, 9, 34, 0.42);   /* затемнение */
+}
+.modal[open] { display: grid; }
+
+/* если используешь <dialog>, у некоторых браузеров есть backdrop */
+.modal::backdrop { background: rgba(15, 9, 34, 0.42); }
+
+.modal__dialog {
+  width: min(420px, 92vw) !important;  /* фиксированная компактная ширина */
+  background: #fff;
+  border-radius: 18px !important;
+  box-shadow: 0 20px 60px rgba(18,6,43,.18);
+  padding: 20px 18px !important;
+  transform: translateZ(0);            /* чёткая отрисовка на мобилках */
+}
+
+.modal__title { 
+  font-size: 22px; 
+  margin: 0 0 12px; 
+}
+
+#login-phone, #login-pass { 
+  font-size: 16px;                     /* без зума на iOS */
+}
+
+.form__actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+.form__actions .btn { min-width: 120px; }
+
+/* на узких — те же размеры, но остаёмся по центру */
+@media (max-width: 560px){
+  .modal { padding: 16px; }
+  .modal__dialog { width: min(380px, 94vw) !important; padding: 16px 14px !important; }
+  .form__actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .form__actions .btn { width: 100%; }
+}
+
+
+/* ==== LOGIN MODAL — всегда по центру ==== */
+.modal{
+  position: fixed;
+  inset: 0;
+  display: grid !important;
+  place-items: center !important;   /* центр по обеим осям */
+  padding: 24px !important;
+  background: rgba(15,9,34,.42);
+  z-index: 300;
+}
+
+/* фон для <dialog> (Safari/Chromium) */
+.modal::backdrop{ background: rgba(15,9,34,.42); }
+
+/* компактная карточка по центру */
+.modal__dialog{
+  width: min(420px, 92vw) !important; /* НЕ 100% */
+  max-height: 90vh;
+  overflow: auto;
+  background: #fff;
+  border-radius: 18px !important;
+  box-shadow: 0 20px 60px rgba(18,6,43,.18);
+  padding: 20px 18px !important;
+  transform: translateZ(0);
+}
+
+/* удобнее на очень узких — остаёмся в центре */
+@media (max-width:560px){
+  .modal{ padding: 16px !important; }          /* не прижимаем вниз */
+  .modal__dialog{ width: min(380px,94vw) !important; padding:16px 14px !important; }
+}
+
+/* блокировка прокрутки фона, пока открыт диалог */
+body:has(.modal[open]){ overflow: hidden; }
+
+
+/* правильное управление видимостью dialog */
+.modal { 
+  display: none !important;         /* по умолчанию скрыто */
+  position: fixed;
+  inset: 0;
+  place-items: center;
+  padding: 24px;
+  background: rgba(15,9,34,.42);
+  z-index: 300;
+}
+
+.modal[open] {
+  display: flex !important;         /* показываем только когда [open] */
+  margin: 0 auto;
+  align-items: center;
+}
+
+
+/* по умолчанию все приватные блоки в drawer скрываем */
+.drawer [data-private]{display:none !important;}
+/* когда авторизованы — показываем */
+body.authed .drawer [data-private]{display:block !important;}
+
+/* конкретно user-блок: скрыт по умолчанию, видим только при auth */
+.drawer-user{display:none;}                     /* было: display:flex */
+body.authed .drawer-user{display:flex;}
+
+
+
+
+/* ===== CLEAN FOOTER ===== */
+.site-footer{
+  background:#0f1020; color:#e8e6ff;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+.site-footer .wrap{
+  max-width: var(--maxw); margin:0 auto; padding:36px 20px;
+  display:grid; gap:22px;
+  grid-template-columns: 1.2fr repeat(3, minmax(160px,1fr));
+}
+.site-footer h4{
+  font-size:1rem; letter-spacing:.2px; margin-bottom:10px; color:#fff;
+}
+.site-footer a{
+  color:#b9f3f1; opacity:.9; text-decoration:none; transition:opacity .2s;
+}
+.site-footer a:hover{ opacity:1; }
+.site-footer ul{ list-style:none; padding:0; margin:0; display:grid; gap:8px; }
+
+.site-footer .brand{
+  gap:12px; font-weight:800; font-size:1.05rem; color:#fff;
+}
+.site-footer .brand__logo{ box-shadow:none; }
+.site-footer .desc{ color:#bcb7e6; margin-top:6px; max-width:40ch; }
+
+.footer-bar{
+  border-top:1px solid rgba(255,255,255,.06);
+  padding:12px 20px; color:#bcb7e6;
+}
+.footer-bar .bar-wrap{
+  max-width: var(--maxw); margin:0 auto; display:flex; gap:12px; align-items:center; justify-content:space-between;
+}
+.footer-links{ display:flex; gap:14px; flex-wrap:wrap; }
+
+.social{ display:flex; gap:10px; margin-top:10px; }
+.social a{ width:36px; height:36px; border:1px solid rgba(255,255,255,.12); border-radius:10px; display:grid; place-items:center; }
+.social svg{ width:18px; height:18px; fill:#b9f3f1; }
+
+/* responsive */
+@media (max-width:900px){
+  .site-footer .wrap{ grid-template-columns: 1fr 1fr; }
+}
+@media (max-width:560px){
+  .site-footer .wrap{ grid-template-columns: 1fr; padding:28px 16px; }
+  .footer-bar .bar-wrap{ flex-direction:column; align-items:flex-start; gap:8px; }
+}
+
   </style>
 </head>
 <body>
@@ -1162,26 +1206,26 @@
 
       <!-- Нав для публичной части -->
       <nav class="nav__links" aria-label="Секции" data-public>
-        <a href="#home" data-translate="nav_home">Басты</a>
-        <a href="#features" data-translate="nav_about">Жоба туралы</a>
-        <a href="#testimonials" data-translate="nav_testimonials">Пікірлер</a>
-        <a href="#partners" data-translate="nav_partners">Серіктестер</a>
-        <a href="#cta" data-translate="nav_join">Қосылу</a>
+        <a href="#home">Главная</a>
+        <a href="#features">О проекте</a>
+        <a href="#testimonials">Отзывы</a>
+        <a href="#partners">Партнеры</a>
+        <a href="#cta">Присоединиться</a>
       </nav>
 
       <!-- Нав для приватной части -->
       <nav class="nav__links" aria-label="Секции" data-private>
-        <a href="#home" data-translate="nav_home">Басты</a>
-        <a href="#courses" data-translate="nav_courses">Курстар</a>
-        <a href="#market" data-translate="nav_market">Маркетплейс</a>
-        <a href="#jobs" data-translate="nav_jobs">Вакансиялар</a>
-        <a href="#grants" data-translate="nav_grants">Гранттар</a>
-        <a href="#support" data-translate="nav_support">Көмек</a>
+        <a href="#home">Главная</a>
+        <a href="#courses">Курсы</a>
+        <a href="#market">Маркетплейс</a>
+        <a href="#jobs">Вакансии</a>
+        <a href="#grants">Гранты</a>
+        <a href="#support">Помощь</a>
       </nav>
 
       <div class="nav__actions">
-        <button class="btn btn--ghost" id="btn-login" data-public data-translate="login">Кіру</button>
-        <button class="btn" id="btn-join" data-public data-translate="join">Қосылу</button>
+        <button class="btn btn--ghost" id="btn-login" data-public>Войти</button>
+        <button class="btn" id="btn-join" data-public>Присоединиться</button>
 
         <details class="user" id="user-area" style="display:none" data-private>
           <summary class="user__btn">
@@ -1189,22 +1233,12 @@
             <span class="chip" id="user-role"></span>
           </summary>
           <div class="user__menu">
-            <a class="menu__item" href="#profile" data-translate="profile">Профиль</a>
-            <button class="menu__item" id="btn-logout" data-translate="logout">Шығу</button>
+            <a class="menu__item" href="#profile">Профиль</a>
+            <button class="menu__item" id="btn-logout">Выйти</button>
           </div>
         </details>
-        
-        <!-- Переключатель языка -->
-        <div class="lang-switcher">
-          <button class="lang-btn" id="current-lang">Қаз</button>
-          <div class="lang-dropdown">
-            <div class="lang-option" data-lang="kk">Қазақша</div>
-            <div class="lang-option" data-lang="ru">Русский</div>
-            <div class="lang-option" data-lang="en">English</div>
-          </div>
-        </div>
 
-        <button class="burger" id="burger" aria-label="Мәзірді ашу" aria-expanded="false" aria-controls="drawer">
+        <button class="burger" id="burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="drawer">
           <span></span>
         </button>
       </div>
@@ -1215,45 +1249,38 @@
        MOBILE DRAWER
   ======================================================== -->
   <aside class="drawer" id="drawer" aria-hidden="true">
-    <!-- Переключатель языка для мобильных -->
-    <div class="drawer-lang">
-      <button class="drawer-lang-btn active" data-lang="kk">Қаз</button>
-      <button class="drawer-lang-btn" data-lang="ru">Рус</button>
-      <button class="drawer-lang-btn" data-lang="en">Eng</button>
-    </div>
-    
     <!-- Блок пользователя (отображается только после авторизации) -->
     <div class="drawer-user" data-private>
       <div class="drawer-user__info">
-        <span class="drawer-user__name" id="drawer-username">Пайдаланушы аты</span>
-        <span class="drawer-user__role" id="drawer-userrole">Рөл</span>
+        <span class="drawer-user__name" id="drawer-username">Имя пользователя</span>
+        <span class="drawer-user__role" id="drawer-userrole">Роль</span>
       </div>
-      <button class="btn btn--ghost" id="drawer-logout" data-translate="logout">Шығу</button>
+      <button class="btn btn--ghost" id="drawer-logout">Выйти</button>
     </div>
     
     <!-- Навигация для публичной части -->
     <nav data-public>
-      <a href="#home" data-translate="nav_home">Басты</a>
-      <a href="#features" data-translate="nav_about">Жоба туралы</a>
-      <a href="#testimonials" data-translate="nav_testimonials">Пікірлер</a>
-      <a href="#partners" data-translate="nav_partners">Серіктестер</a>
-      <a href="#cta" data-translate="nav_join">Қосылу</a>
+      <a href="#home">Главная</a>
+      <a href="#features">О проекте</a>
+      <a href="#testimonials">Отзывы</a>
+      <a href="#partners">Партнеры</a>
+      <a href="#cta">Присоединиться</a>
     </nav>
     
     <!-- Навигация для приватной части -->
     <nav data-private>
-      <a href="#home" data-translate="nav_home">Басты</a>
-      <a href="#courses" data-translate="nav_courses">Курстар</a>
-      <a href="#market" data-translate="nav_market">Маркетплейс</a>
-      <a href="#jobs" data-translate="nav_jobs">Вакансиялар</a>
-      <a href="#grants" data-translate="nav_grants">Гранттар</a>
-      <a href="#support" data-translate="nav_support">Көмек</a>
+      <a href="#home">Главная</a>
+      <a href="#courses">Курсы</a>
+      <a href="#market">Маркетплейс</a>
+      <a href="#jobs">Вакансии</a>
+      <a href="#grants">Гранты</a>
+      <a href="#support">Помощь</a>
     </nav>
     
     <!-- Кнопки авторизации (отображаются только до авторизации) -->
     <div class="drawer-auth-actions" data-public>
-      <button class="btn" id="drawer-login" data-translate="login">Кіру</button>
-      <button class="btn btn--ghost" id="drawer-join" data-translate="join">Қосылу</button>
+      <button class="btn" id="drawer-login">Войти</button>
+      <button class="btn btn--ghost" id="drawer-join">Присоединиться</button>
     </div>
   </aside>
 
@@ -1264,60 +1291,60 @@
     <!-- ===== HERO (общий) ===== -->
     <section class="hero container" id="home">
       <div class="hero__wrap">
-        <h1 class="hero__title" data-translate="hero_title">МАМА ҚОЛЫНАН БӘРІ КЕЛЕДІ — ЕГЕР ЖАНЫНДА СЕНЕТІНДЕР БОЛСА…</h1>
-        <p class="hero__subtitle" data-translate="hero_subtitle">Аналарға арналған әлеуметтік-бизнес онлайн-платформа: оқу, қашықтан жұмыс, қолдау және қауымдастық.</p>
+        <h1 class="hero__title">МАМА ҚОЛЫНАН БӘРІ КЕЛЕДІ — ЕГЕР ЖАНЫНДА СЕНЕТІНДЕР БОЛСА…</h1>
+        <p class="hero__subtitle">Социально‑деловая онлайн‑платформа для мам: обучение, удалённая работа, поддержка и сообщество.</p>
         <div class="hero__cta" data-public>
-          <a class="btn" href="#features" data-translate="learn_more">Толығырақ</a>
-          <a class="btn btn--ghost" href="#testimonials" data-translate="our_features">Біздің мүмкіндіктеріміз</a>
+          <a class="btn" href="#features">Узнать больше</a>
+          <a class="btn btn--ghost" href="#testimonials">Наши возможности</a>
         </div>
         <div class="hero__cta" data-private>
-          <a class="btn" href="#courses" data-translate="nav_courses">Курстар</a>
-          <a class="btn btn--ghost" href="#market" data-translate="nav_market">Маркетплейс</a>
-          <a class="btn btn--ghost" href="#jobs" data-translate="nav_jobs">Вакансиялар</a>
+          <a class="btn" href="#courses">Курсы</a>
+          <a class="btn btn--ghost" href="#market">Маркетплейс</a>
+          <a class="btn btn--ghost" href="#jobs">Вакансии</a>
         </div>
         <div class="badge-float" aria-hidden="true">
-          <span class="chip" data-translate="badge_education">🎓 Оқу</span>
-          <span class="chip" data-translate="badge_work">💼 Жұмыс</span>
-          <span class="chip" data-translate="badge_support">🤝 Қолдау</span>
+          <span class="chip">🎓 Обучение</span>
+          <span class="chip">💼 Работа</span>
+          <span class="chip">🤝 Поддержка</span>
         </div>
       </div>
     </section>
 
     <section id="features" data-public>
       <div class="container">
-        <div class="section__head"><h2 data-translate="section_about">Жоба туралы</h2></div>
-        <div class="muted" data-translate="section_about_desc">қауымдастық • оқу • жұмыс</div>
+        <div class="section__head"><h2>О проекте «Мама может»</h2></div>
+        <div class="muted">сообщество • обучение • работа</div>
 
         <div class="cards" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
-          <article class="card"><h3 data-translate="feature1_title">🎓 Оқу курстары</h3><div class="muted" data-translate="feature1_desc">Сұранысқа ие дағдылар, кураторлар, ыңғайлы жылдамдық.</div></article>
-          <article class="card"><h3 data-translate="feature2_title">💼 Қашықтан жұмыс</h3><div class="muted" data-translate="feature2_desc">Икемді кестесі бар вакансиялар биржасы.</div></article>
-          <article class="card"><h3 data-translate="feature3_title">🤝 Қауымдастық және менторлар</h3><div class="muted" data-translate="feature3_desc">Чаттар, кеңес беру, психологиялық қолдау.</div></article>
-          <article class="card"><h3 data-translate="feature4_title">💰 Гранттар мен конкурстар</h3><div class="muted" data-translate="feature4_desc">Әйелдердің жобаларын қаржыландыру.</div></article>
-          <article class="card"><h3 data-translate="feature5_title">🛍️ Маркетплейс</h3><div class="muted" data-translate="feature5_desc">Қолөнер бұйымдары мен қызметтерді сату.</div></article>
-          <article class="card"><h3 data-translate="feature6_title">👩‍👧‍👦 Іс-шаралар</h3><div class="muted" data-translate="feature6_desc">Отбасы үшін онлайн/офлайн іс-шаралар.</div></article>
+          <article class="card"><h3>🎓 Образовательные курсы</h3><div class="muted">Востребованные навыки, кураторы, удобный темп.</div></article>
+          <article class="card"><h3>💼 Удалённая работа</h3><div class="muted">Биржа вакансий с гибким графиком.</div></article>
+          <article class="card"><h3>🤝 Сообщество и менторы</h3><div class="muted">Чаты, консультации, психологическая поддержка.</div></article>
+          <article class="card"><h3>💰 Гранты и конкурсы</h3><div class="muted">Финансирование женских проектов.</div></article>
+          <article class="card"><h3>🛍️ Маркетплейс</h3><div class="muted">Продажа handmade и услуг.</div></article>
+          <article class="card"><h3>👩‍👧‍👦 Мероприятия</h3><div class="muted">Онлайн/офлайн активити для семьи.</div></article>
         </div>
       </div>
     </section>
 
     <section id="testimonials" data-public>
       <div class="container">
-        <div class="section__head"><h2 data-translate="section_testimonials">Сәттілік тарихтары</h2></div>
+        <div class="section__head"><h2>Истории успеха</h2></div>
         <div class="cards" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
-          <article class="card"><div class="muted" data-translate="testimonial1">«Копирайтингті меңгеріп, үйден табыс таба бастадым. Балаларға да, жұмысқа да уақыт бар.»</div><strong>Айгүл</strong><div class="muted" data-translate="testimonial1_role">Копирайтер</div></article>
-          <article class="card"><div class="muted" data-translate="testimonial2">«Грант алдым және балалар киім брендін іске қостым. Қауымдастықсыз жасай алмас едім.»</div><strong>Мадина</strong><div class="muted" data-translate="testimonial2_role">Дизайнер</div></article>
-          <article class="card"><div class="muted" data-translate="testimonial3">«Икемді жоба таптым және ұқсас міндеттері бар аналардың қолдауын алдым.»</div><strong>Әсел</strong><div class="muted" data-translate="testimonial3_role">SMM</div></article>
+          <article class="card"><div class="muted">«Освоила копирайтинг и начала зарабатывать из дома. Есть время на детей и работу.»</div><strong>Айгуль</strong><div class="muted">Копирайтер</div></article>
+          <article class="card"><div class="muted">«Получила грант и запустила бренд детской одежды. Без сообщества не справилась бы.»</div><strong>Мадина</strong><div class="muted">Дизайнер</div></article>
+          <article class="card"><div class="muted">«Нашла гибкий проект и поддержку от мам с похожими задачами.»</div><strong>Асель</strong><div class="muted">SMM</div></article>
         </div>
       </div>
     </section>
 
     <section id="partners" data-public>
       <div class="container">
-        <div class="section__head"><h2 data-translate="section_partners">Біздің серіктестер</h2></div>
+        <div class="section__head"><h2>Наши партнёры</h2></div>
         <div class="cards" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
-          <article class="card center muted" data-translate="partner1">Еңбек министрлігі</article>
-          <article class="card center muted" data-translate="partner2">«Даму» қоры</article>
-          <article class="card center muted" data-translate="partner3">Әйелдерді қолдау орталығы</article>
-          <article class="card center muted" data-translate="partner4">Astana Hub</article>
+          <article class="card center muted">Министерство труда</article>
+          <article class="card center muted">Фонд «Даму»</article>
+          <article class="card center muted">Центр поддержки женщин</article>
+          <article class="card center muted">Astana Hub</article>
         </div>
       </div>
     </section>
@@ -1325,11 +1352,11 @@
     <section id="cta" data-public>
       <div class="container">
         <div class="card" style="background:linear-gradient(135deg,var(--primary),var(--secondary)); color:#fff; text-align:center; padding:40px">
-          <h3 style="font-size:clamp(24px,4vw,36px); margin:0 0 8px 0" data-translate="cta_title">Бастауға дайынсыз ба?</h3>
-          <p class="muted" style="color:#fff; opacity:.9; margin:0 0 14px 0" data-translate="cta_subtitle">#мамаможет қауымдастығына қосылып, жаңа мүмкіндіктерді ашыңыз</p>
+          <h3 style="font-size:clamp(24px,4vw,36px); margin:0 0 8px 0">Готовы начать?</h3>
+          <p class="muted" style="color:#fff; opacity:.9; margin:0 0 14px 0">Присоединяйтесь к #мамаможет и откройте новые возможности</p>
           <div class="hero__cta">
-            <button class="btn" id="cta-join" data-translate="cta_join">Тегін қосылу</button>
-            <a class="btn btn--ghost" href="#features" data-translate="learn_more">Толығырақ</a>
+            <button class="btn" id="cta-join">Присоединиться бесплатно</button>
+            <a class="btn btn--ghost" href="#features">Подробнее</a>
           </div>
         </div>
       </div>
@@ -1339,22 +1366,22 @@
     <section id="courses" data-private>
       <div class="container">
         <div class="section__head">
-          <h2 data-translate="nav_courses">Курстар</h2>
+          <h2>Курстар</h2>
           <div class="muted" id="courses-count">0</div>
         </div>
         <div class="filterbar">
-          <input class="input" id="course-search" placeholder="Іздеу" data-translate="search" />
+          <input class="input" id="course-search" placeholder="Іздеу" />
           <select id="course-tag"></select>
           <select id="course-sort">
-            <option value="rating" data-translate="sort_rating">Рейтинг бойынша</option>
-            <option value="price" data-translate="sort_price">Баға бойынша</option>
-            <option value="duration" data-translate="sort_duration">Ұзақтығы бойынша</option>
+            <option value="rating">Рейтинг бойынша</option>
+            <option value="price">Баға бойынша</option>
+            <option value="duration">Ұзақтығы бойынша</option>
           </select>
           <button class="btn btn--ghost" id="course-dir" aria-pressed="false" title="Направление сортировки">↑</button>
         </div>
         <div class="cards" id="courses-list"></div>
         <div class="center mt-12">
-          <button class="btn btn--ghost" id="courses-more" data-translate="show_more">Тағы көрсету</button>
+          <button class="btn btn--ghost" id="courses-more">Тағы көрсету</button>
         </div>
       </div>
     </section>
@@ -1362,22 +1389,22 @@
     <section id="market" data-private>
       <div class="container">
         <div class="section__head">
-          <h2 data-translate="nav_market">Маркетплейс</h2>
+          <h2>Маркетплейс</h2>
           <div class="muted" id="market-count">0</div>
         </div>
         <div class="filterbar">
-          <input class="input" id="market-search" placeholder="Іздеу" data-translate="search" />
+          <input class="input" id="market-search" placeholder="Іздеу" />
           <select id="market-type"></select>
           <select id="market-sort">
-            <option value="price" data-translate="sort_price">Баға бойынша</option>
-            <option value="title" data-translate="sort_title">Атауы бойынша</option>
+            <option value="price">Баға бойынша</option>
+            <option value="title">Атауы бойынша</option>
           </select>
           <button class="btn btn--ghost" id="market-dir" aria-pressed="false">↑</button>
-          <button class="btn" id="market-add" data-translate="market_add">Хабарландыру қосу</button>
+          <button class="btn" id="market-add">Хабарландыру қосу</button>
         </div>
         <div class="cards" id="market-list"></div>
         <div class="center mt-12">
-          <button class="btn btn--ghost" id="market-more" data-translate="show_more">Тағы көрсету</button>
+          <button class="btn btn--ghost" id="market-more">Тағы көрсету</button>
         </div>
       </div>
     </section>
@@ -1385,21 +1412,21 @@
     <section id="jobs" data-private>
       <div class="container">
         <div class="section__head">
-          <h2 data-translate="nav_jobs">Вакансиялар / Биржа</h2>
+          <h2>Вакансии / Биржа</h2>
           <div class="muted" id="jobs-count">0</div>
         </div>
         <div class="filterbar">
-          <input class="input" id="jobs-search" placeholder="Іздеу" data-translate="search" />
+          <input class="input" id="jobs-search" placeholder="Поиск" />
           <select id="jobs-sort">
-            <option value="deadline" data-translate="sort_deadline">Дедлайн бойынша</option>
-            <option value="sum" data-translate="sort_payment">Төлем бойынша</option>
-            <option value="title" data-translate="sort_title">Атауы бойынша</option>
+            <option value="deadline">По дедлайну</option>
+            <option value="sum">По оплате</option>
+            <option value="title">По названию</option>
           </select>
           <button class="btn btn--ghost" id="jobs-dir" aria-pressed="false">↑</button>
         </div>
         <div class="cards" id="jobs-list"></div>
         <div class="center mt-12">
-          <button class="btn btn--ghost" id="jobs-more" data-translate="show_more">Тағы көрсету</button>
+          <button class="btn btn--ghost" id="jobs-more">Показать ещё</button>
         </div>
       </div>
     </section>
@@ -1407,28 +1434,28 @@
     <section id="grants" data-private>
       <div class="container">
         <div class="section__head">
-          <h2 data-translate="nav_grants">Гранттар</h2>
+          <h2>Гранттар</h2>
           <div class="muted" id="grants-count">0</div>
         </div>
         <div class="filterbar">
-          <input class="input" id="grants-search" placeholder="Іздеу" data-translate="search" />
+          <input class="input" id="grants-search" placeholder="Іздеу" />
           <select id="grants-sort">
-            <option value="deadline" data-translate="sort_deadline">Дедлайн бойынша</option>
-            <option value="sum" data-translate="sort_sum">Сома бойынша</option>
-            <option value="title" data-translate="sort_title">Атауы бойынша</option>
+            <option value="deadline">Дедлайн бойынша</option>
+            <option value="sum">Сома бойынша</option>
+            <option value="title">Атауы бойынша</option>
           </select>
           <button class="btn btn--ghost" id="grants-dir" aria-pressed="false">↑</button>
         </div>
         <div class="cards" id="grants-list"></div>
         <div class="center mt-12">
-          <button class="btn btn--ghost" id="grants-more" data-translate="show_more">Тағы көрсету</button>
+          <button class="btn btn--ghost" id="grants-more">Тағы көрсету</button>
         </div>
       </div>
     </section>
 
     <section id="support" data-private>
       <div class="container">
-        <div class="section__head"><h2 data-translate="nav_support">Көмек</h2></div>
+        <div class="section__head"><h2>Көмек</h2></div>
         <div class="cards" id="support-list"></div>
       </div>
     </section>
@@ -1442,9 +1469,9 @@
       <div>
         <div class="brand">
           <img src="mama-mozhet-logo.svg" alt="Мама может — логотип" width="240" height="64">
-          <span data-translate="footer_brand">Мама может</span> <span class="muted" data-translate="footer_tag">#мамаможет</span>
+          Мама может <span class="muted">#мамаможет</span>
         </div>
-        <p class="desc" data-translate="footer_desc">Аналарға арналған әлеуметтік-бизнес платформа: оқу, қашықтан жұмыс, қолдау және қауымдастық.</p>
+        <p class="desc">Социально‑деловая платформа для мам: обучение, удалённая работа, поддержка и сообщество.</p>
         <div class="social" aria-label="Социальные сети">
           <a href="https://t.me/mamamojet" aria-label="Telegram">
             <svg viewBox="0 0 24 24"><path d="M9.04 15.21 8.9 19.2c.57 0 .82-.25 1.12-.55l2.69-2.58 5.58 4.09c1.02.56 1.75.27 2.03-.94l3.68-17.2c.34-1.6-.58-2.23-1.6-1.84L1.38 9.9c-1.54.6-1.52 1.46-.27 1.85l6.46 2.02 14.97-9.43c.7-.42 1.34-.19.81.23"/></svg>
@@ -1459,42 +1486,42 @@
       </div>
   
       <div>
-        <h4 data-translate="footer_platform">Платформа</h4>
+        <h4>Платформа</h4>
         <ul>
-          <li><a href="#features" data-translate="nav_about">Жоба туралы</a></li>
-          <li><a href="#testimonials" data-translate="nav_testimonials">Пікірлер</a></li>
-          <li><a href="#partners" data-translate="nav_partners">Серіктестер</a></li>
-          <li><a href="#cta" data-translate="nav_join">Қосылу</a></li>
+          <li><a href="#features">О проекте</a></li>
+          <li><a href="#testimonials">Отзывы</a></li>
+          <li><a href="#partners">Партнёры</a></li>
+          <li><a href="#cta">Присоединиться</a></li>
         </ul>
       </div>
   
       <div data-private>
-        <h4 data-translate="footer_features">Мүмкіндіктер</h4>
+        <h4>Возможности</h4>
         <ul>
-          <li><a href="#courses" data-translate="nav_courses">Курстар</a></li>
-          <li><a href="#market" data-translate="nav_market">Маркетплейс</a></li>
-          <li><a href="#jobs" data-translate="nav_jobs">Вакансиялар</a></li>
-          <li><a href="#grants" data-translate="nav_grants">Гранттар</a></li>
-          <li><a href="#support" data-translate="nav_support">Көмек</a></li>
+          <li><a href="#courses">Курсы</a></li>
+          <li><a href="#market">Маркетплейс</a></li>
+          <li><a href="#jobs">Вакансии</a></li>
+          <li><a href="#grants">Гранты</a></li>
+          <li><a href="#support">Помощь</a></li>
         </ul>
       </div>
   
       <div>
-        <h4 data-translate="footer_contacts">Байланыс</h4>
+        <h4>Контакты</h4>
         <ul>
           <li><a href="mailto:mamamojet@gmail.com">mamamojet@gmail.com</a></li>
           <li><a href="tel:+77753882202">+7 775 388 2202</a></li>
-          <li><a href="#home" data-translate="footer_country">Қазақстан</a></li>
+          <li><a href="#home">Казахстан</a></li>
         </ul>
       </div>
     </div>
   
     <div class="footer-bar">
       <div class="bar-wrap">
-        <div>© <span id="year"></span> <span data-translate="footer_copyright">«Мама может». Барлық құқықтар қорғалған.</span></div>
+        <div>© <span id="year"></span> «Мама может». Все права защищены.</div>
         <div class="footer-links">
-          <a href="#" data-translate="footer_privacy">Құпиялылық саясаты</a>
-          <a href="#" data-translate="footer_terms">Пайдаланушы келісімі</a>
+          <a href="#">Политика конфиденциальности</a>
+          <a href="#">Пользовательское соглашение</a>
         </div>
       </div>
     </div>
@@ -1510,17 +1537,17 @@
   ======================================================== -->
   <dialog class="modal" id="modal-login" aria-labelledby="login-title" aria-modal="true">
     <div class="modal__dialog">
-      <h3 class="modal__title" id="login-title" data-translate="login_title">Кіру</h3>
+      <h3 class="modal__title" id="login-title">Вход</h3>
       <form class="form" id="login-form">
         <div class="row">
-          <input class="input" name="login" id="login-phone" inputmode="tel" placeholder="Телефон (без +)" autocomplete="username" required data-translate="login_phone" />
-          <input class="input" name="pass" id="login-pass" type="password" placeholder="Құпия сөз" autocomplete="current-password" required data-translate="login_password" />
+          <input class="input" name="login" id="login-phone" inputmode="tel" placeholder="Телефон (без +)" autocomplete="username" required />
+          <input class="input" name="pass" id="login-pass" type="password" placeholder="Пароль" autocomplete="current-password" required />
         </div>
-        <div class="error" id="login-error" data-translate="login_error">Қате логин немесе құпия сөз</div>
+        <div class="error" id="login-error">Неверный логин или пароль</div>
         <div class="form__actions">
-          <button type="button" class="btn btn--ghost" data-close formnovalidate data-translate="cancel">Бас тарту</button>
+          <button type="button" class="btn btn--ghost" data-close formnovalidate>Отмена</button>
           <button type="submit" class="btn">
-            <span class="spinner" id="login-spin"></span><span data-translate="login_submit">Кіру</span>
+            <span class="spinner" id="login-spin"></span><span>Войти</span>
           </button>
         </div>
       </form>
@@ -1531,349 +1558,6 @@
        SCRIPTS
   ======================================================== -->
   <script>
-    /* ===================== LANGUAGE SUPPORT ===================== */
-    const translations = {
-      kk: {
-        // Общие
-        "login": "Кіру",
-        "join": "Қосылу",
-        "logout": "Шығу",
-        "profile": "Профиль",
-        "cancel": "Бас тарту",
-        "search": "Іздеу",
-        "show_more": "Тағы көрсету",
-        "learn_more": "Толығырақ",
-        "our_features": "Біздің мүмкіндіктеріміз",
-        "all": "Барлығы",
-        
-        // Навигация
-        "nav_home": "Басты",
-        "nav_about": "Жоба туралы",
-        "nav_testimonials": "Пікірлер",
-        "nav_partners": "Серіктестер",
-        "nav_join": "Қосылу",
-        "nav_courses": "Курстар",
-        "nav_market": "Маркетплейс",
-        "nav_jobs": "Вакансиялар",
-        "nav_grants": "Гранттар",
-        "nav_support": "Көмек",
-        
-        // Герой
-        "hero_title": "МАМА ҚОЛЫНАН БӘРІ КЕЛЕДІ — ЕГЕР ЖАНЫНДА СЕНЕТІНДЕР БОЛСА…",
-        "hero_subtitle": "Аналарға арналған әлеуметтік-бизнес онлайн-платформа: оқу, қашықтан жұмыс, қолдау және қауымдастық.",
-        "badge_education": "🎓 Оқу",
-        "badge_work": "💼 Жұмыс",
-        "badge_support": "🤝 Қолдау",
-        
-        // Особенности
-        "section_about": "Жоба туралы",
-        "section_about_desc": "қауымдастық • оқу • жұмыс",
-        "feature1_title": "🎓 Оқу курстары",
-        "feature1_desc": "Сұранысқа ие дағдылар, кураторлар, ыңғайлы жылдамдық.",
-        "feature2_title": "💼 Қашықтан жұмыс",
-        "feature2_desc": "Икемді кестесі бар вакансиялар биржасы.",
-        "feature3_title": "🤝 Қауымдастық және менторлар",
-        "feature3_desc": "Чаттар, кеңес беру, психологиялық қолдау.",
-        "feature4_title": "💰 Гранттар мен конкурстар",
-        "feature4_desc": "Әйелдердің жобаларын қаржыландыру.",
-        "feature5_title": "🛍️ Маркетплейс",
-        "feature5_desc": "Қолөнер бұйымдары мен қызметтерді сату.",
-        "feature6_title": "👩‍👧‍👦 Іс-шаралар",
-        "feature6_desc": "Отбасы үшін онлайн/офлайн іс-шаралар.",
-        
-        // Отзывы
-        "section_testimonials": "Сәттілік тарихтары",
-        "testimonial1": "«Копирайтингті меңгеріп, үйден табыс таба бастадым. Балаларға да, жұмысқа да уақыт бар.»",
-        "testimonial1_role": "Копирайтер",
-        "testimonial2": "«Грант алдым және балалар киім брендін іске қостым. Қауымдастықсыз жасай алмас едім.»",
-        "testimonial2_role": "Дизайнер",
-        "testimonial3": "«Икемді жоба таптым және ұқсас міндеттері бар аналардың қолдауын алдым.»",
-        "testimonial3_role": "SMM",
-        
-        // Партнеры
-        "section_partners": "Біздің серіктестер",
-        "partner1": "Еңбек министрлігі",
-        "partner2": "«Даму» қоры",
-        "partner3": "Әйелдерді қолдау орталығы",
-        "partner4": "Astana Hub",
-        
-        // Призыв к действию
-        "cta_title": "Бастауға дайынсыз ба?",
-        "cta_subtitle": "#мамаможет қауымдастығына қосылып, жаңа мүмкіндіктерді ашыңыз",
-        "cta_join": "Тегін қосылу",
-        
-        // Сортировка
-        "sort_rating": "Рейтинг бойынша",
-        "sort_price": "Баға бойынша",
-        "sort_duration": "Ұзақтығы бойынша",
-        "sort_title": "Атауы бойынша",
-        "sort_deadline": "Дедлайн бойынша",
-        "sort_payment": "Төлем бойынша",
-        "sort_sum": "Сома бойынша",
-        
-        // Маркетплейс
-        "market_add": "Хабарландыру қосу",
-        
-        // Логин
-        "login_title": "Кіру",
-        "login_phone": "Телефон (без +)",
-        "login_password": "Құпия сөз",
-        "login_error": "Қате логин немесе құпия сөз",
-        "login_submit": "Кіру",
-        
-        // Футер
-        "footer_brand": "Мама может",
-        "footer_tag": "#мамаможет",
-        "footer_desc": "Аналарға арналған әлеуметтік-бизнес платформа: оқу, қашықтан жұмыс, қолдау және қауымдастық.",
-        "footer_platform": "Платформа",
-        "footer_features": "Мүмкіндіктер",
-        "footer_contacts": "Байланыс",
-        "footer_country": "Қазақстан",
-        "footer_copyright": "«Мама может». Барлық құқықтар қорғалған.",
-        "footer_privacy": "Құпиялылық саясаты",
-        "footer_terms": "Пайдаланушы келісімі"
-      },
-      ru: {
-        // Общие
-        "login": "Войти",
-        "join": "Присоединиться",
-        "logout": "Выйти",
-        "profile": "Профиль",
-        "cancel": "Отмена",
-        "search": "Поиск",
-        "show_more": "Показать ещё",
-        "learn_more": "Подробнее",
-        "our_features": "Наши возможности",
-        "all": "Все",
-        
-        // Навигация
-        "nav_home": "Главная",
-        "nav_about": "О проекте",
-        "nav_testimonials": "Отзывы",
-        "nav_partners": "Партнеры",
-        "nav_join": "Присоединиться",
-        "nav_courses": "Курсы",
-        "nav_market": "Маркетплейс",
-        "nav_jobs": "Вакансии",
-        "nav_grants": "Гранты",
-        "nav_support": "Помощь",
-        
-        // Герой
-        "hero_title": "МАМА МОЖЕТ ВСЁ — ЕСЛИ РЯДОМ ТЕ, КТО ВЕРЯТ В НЕЁ…",
-        "hero_subtitle": "Социально-деловая онлайн-платформа для мам: обучение, удалённая работа, поддержка и сообщество.",
-        "badge_education": "🎓 Обучение",
-        "badge_work": "💼 Работа",
-        "badge_support": "🤝 Поддержка",
-        
-        // Особенности
-        "section_about": "О проекте",
-        "section_about_desc": "сообщество • обучение • работа",
-        "feature1_title": "🎓 Образовательные курсы",
-        "feature1_desc": "Востребованные навыки, кураторы, удобный темп.",
-        "feature2_title": "💼 Удалённая работа",
-        "feature2_desc": "Биржа вакансий с гибким графиком.",
-        "feature3_title": "🤝 Сообщество и менторы",
-        "feature3_desc": "Чаты, консультации, психологическая поддержка.",
-        "feature4_title": "💰 Гранты и конкурсы",
-        "feature4_desc": "Финансирование женских проектов.",
-        "feature5_title": "🛍️ Маркетплейс",
-        "feature5_desc": "Продажа handmade и услуг.",
-        "feature6_title": "👩‍👧‍👦 Мероприятия",
-        "feature6_desc": "Онлайн/офлайн активити для семьи.",
-        
-        // Отзывы
-        "section_testimonials": "Истории успеха",
-        "testimonial1": "«Освоила копирайтинг и начала зарабатывать из дома. Есть время на детей и работу.»",
-        "testimonial1_role": "Копирайтер",
-        "testimonial2": "«Получила грант и запустила бренд детской одежды. Без сообщества не справилась бы.»",
-        "testimonial2_role": "Дизайнер",
-        "testimonial3": "«Нашла гибкий проект и поддержку от мам с похожими задачами.»",
-        "testimonial3_role": "SMM",
-        
-        // Партнеры
-        "section_partners": "Наши партнеры",
-        "partner1": "Министерство труда",
-        "partner2": "Фонд «Даму»",
-        "partner3": "Центр поддержки женщин",
-        "partner4": "Astana Hub",
-        
-        // Призыв к действию
-        "cta_title": "Готовы начать?",
-        "cta_subtitle": "Присоединяйтесь к #мамаможет и откройте новые возможности",
-        "cta_join": "Присоединиться бесплатно",
-        
-        // Сортировка
-        "sort_rating": "По рейтингу",
-        "sort_price": "По цене",
-        "sort_duration": "По длительности",
-        "sort_title": "По названию",
-        "sort_deadline": "По дедлайну",
-        "sort_payment": "По оплате",
-        "sort_sum": "По сумме",
-        
-        // Маркетплейс
-        "market_add": "Добавить объявление",
-        
-        // Логин
-        "login_title": "Вход",
-        "login_phone": "Телефон (без +)",
-        "login_password": "Пароль",
-        "login_error": "Неверный логин или пароль",
-        "login_submit": "Войти",
-        
-        // Футер
-        "footer_brand": "Мама может",
-        "footer_tag": "#мамаможет",
-        "footer_desc": "Социально-деловая платформа для мам: обучение, удалённая работа, поддержка и сообщество.",
-        "footer_platform": "Платформа",
-        "footer_features": "Возможности",
-        "footer_contacts": "Контакты",
-        "footer_country": "Казахстан",
-        "footer_copyright": "«Мама может». Все права защищены.",
-        "footer_privacy": "Политика конфиденциальности",
-        "footer_terms": "Пользовательское соглашение"
-      },
-      en: {
-        // Общие
-        "login": "Login",
-        "join": "Join",
-        "logout": "Logout",
-        "profile": "Profile",
-        "cancel": "Cancel",
-        "search": "Search",
-        "show_more": "Show more",
-        "learn_more": "Learn more",
-        "our_features": "Our features",
-        "all": "All",
-        
-        // Навигация
-        "nav_home": "Home",
-        "nav_about": "About",
-        "nav_testimonials": "Testimonials",
-        "nav_partners": "Partners",
-        "nav_join": "Join",
-        "nav_courses": "Courses",
-        "nav_market": "Marketplace",
-        "nav_jobs": "Jobs",
-        "nav_grants": "Grants",
-        "nav_support": "Support",
-        
-        // Герой
-        "hero_title": "MOM CAN DO ANYTHING — IF SHE HAS THOSE WHO BELIEVE IN HER…",
-        "hero_subtitle": "Socio-business online platform for moms: learning, remote work, support and community.",
-        "badge_education": "🎓 Education",
-        "badge_work": "💼 Work",
-        "badge_support": "🤝 Support",
-        
-        // Особенности
-        "section_about": "About the project",
-        "section_about_desc": "community • education • work",
-        "feature1_title": "🎓 Educational courses",
-        "feature1_desc": "In-demand skills, curators, convenient pace.",
-        "feature2_title": "💼 Remote work",
-        "feature2_desc": "Job board with flexible schedule.",
-        "feature3_title": "🤝 Community and mentors",
-        "feature3_desc": "Chats, consultations, psychological support.",
-        "feature4_title": "💰 Grants and competitions",
-        "feature4_desc": "Funding for women's projects.",
-        "feature5_title": "🛍️ Marketplace",
-        "feature5_desc": "Sale of handmade and services.",
-        "feature6_title": "👩‍👧‍👦 Events",
-        "feature6_desc": "Online/offline activities for the family.",
-        
-        // Отзывы
-        "section_testimonials": "Success stories",
-        "testimonial1": "«I mastered copywriting and started earning from home. There is time for children and work.»",
-        "testimonial1_role": "Copywriter",
-        "testimonial2": "«I received a grant and launched a children's clothing brand. I couldn't have done it without the community.»",
-        "testimonial2_role": "Designer",
-        "testimonial3": "«I found a flexible project and support from moms with similar tasks.»",
-        "testimonial3_role": "SMM",
-        
-        // Партнеры
-        "section_partners": "Our partners",
-        "partner1": "Ministry of Labor",
-        "partner2": "Damu Fund",
-        "partner3": "Women Support Center",
-        "partner4": "Astana Hub",
-        
-        // Призыв к действию
-        "cta_title": "Ready to start?",
-        "cta_subtitle": "Join #mamamozhet and discover new opportunities",
-        "cta_join": "Join for free",
-        
-        // Сортировка
-        "sort_rating": "By rating",
-        "sort_price": "By price",
-        "sort_duration": "By duration",
-        "sort_title": "By title",
-        "sort_deadline": "By deadline",
-        "sort_payment": "By payment",
-        "sort_sum": "By amount",
-        
-        // Маркетплейс
-        "market_add": "Add listing",
-        
-        // Логин
-        "login_title": "Login",
-        "login_phone": "Phone (without +)",
-        "login_password": "Password",
-        "login_error": "Wrong login or password",
-        "login_submit": "Login",
-        
-        // Футер
-        "footer_brand": "Mom can",
-        "footer_tag": "#mamamozhet",
-        "footer_desc": "Socio-business platform for moms: learning, remote work, support and community.",
-        "footer_platform": "Platform",
-        "footer_features": "Features",
-        "footer_contacts": "Contacts",
-        "footer_country": "Kazakhstan",
-        "footer_copyright": "«Mom can». All rights reserved.",
-        "footer_privacy": "Privacy Policy",
-        "footer_terms": "Terms of Use"
-      }
-    };
-
-    let currentLang = 'kk'; // Казахский по умолчанию
-
-    // Функция установки языка
-    function setLanguage(lang) {
-      currentLang = lang;
-      localStorage.setItem('mm_lang', lang);
-      document.documentElement.lang = lang;
-      
-      // Обновляем язык в шапке
-      const langNames = { 'kk': 'Қаз', 'ru': 'Рус', 'en': 'Eng' };
-      document.getElementById('current-lang').textContent = langNames[lang];
-      
-      // Обновляем активный язык в выдвижном меню
-      document.querySelectorAll('.lang-option').forEach(opt => {
-        opt.classList.toggle('active', opt.dataset.lang === lang);
-        });
-      
-      // Обновляем все тексты на странице
-      document.querySelectorAll('[data-translate]').forEach(element => {
-        const key = element.getAttribute('data-translate');
-        const translation = translations[lang][key] || translations['kk'][key];
-        if (element.tagName === 'INPUT') {
-            element.placeholder = translation;           // инпуты — плейсхолдер
-            } else if (element.tagName === 'OPTION') {
-            element.textContent = translation;           // опции селектов — текст
-            } else {
-            element.textContent = translation;           // всё остальное — текст
-            }
-      });
-      
-      // Обновляем динамические элементы
-      if (app.user) {
-        renderCourses();
-        renderMarket();
-        renderJobs();
-        renderGrants();
-      }
-    }
-
     /* ===================== CONFIG ===================== */
     const CONFIG = {
       spreadsheetId: '1najoTh6IacXwU_se-9de-KMlZ7XQ5F64d0P1rdlMXTQ',
@@ -1922,7 +1606,7 @@
     function unique(arr){ return [...new Set(arr.filter(Boolean))]; }
     function fillSelectOptions(selectEl, values, firstLabel='Барлығы'){
       if (!selectEl) return;
-      const opts = [`<option value="">${translations[currentLang][firstLabel] || firstLabel}</option>`].concat(values.map(v => `<option value="${v}">${v}</option>`));
+      const opts = [`<option value="">${firstLabel}</option>`].concat(values.map(v => `<option value="${v}">${v}</option>`));
       selectEl.innerHTML = opts.join('');
     }
     function toggleDir(btn){
@@ -2083,7 +1767,7 @@
         more:      r['подробнее']   || ''
       }));
       const catValues = unique(app.data.courses.map(c => c.tag));
-      fillSelectOptions(document.getElementById('course-tag'), catValues, 'all');
+      fillSelectOptions(document.getElementById('course-tag'), catValues, 'Барлығы');
       renderCourses();
     }
     function renderCourses(){
@@ -2108,13 +1792,13 @@
         el.innerHTML = `
           <div class="chip">${c.tag || '—'}</div>
           <h3>${c.title}</h3>
-          <div class="muted">${c.duration || 0} ${translations[currentLang]['duration_weeks'] || 'нед'} · ✨ ${c.rating || 0}</div>
-          <div class="price">${c.price ? new Intl.NumberFormat('ru-RU').format(c.price)+' ₸' : translations[currentLang]['free'] || 'Бесплатно'}</div>
-          <button class="btn btn--ghost">${translations[currentLang]['details'] || 'Подробнее'}</button>
+          <div class="muted">${c.duration || 0} нед · ✨ ${c.rating || 0}</div>
+          <div class="price">${c.price ? new Intl.NumberFormat('ru-RU').format(c.price)+' ₸' : 'Бесплатно'}</div>
+          <button class="btn btn--ghost">Подробнее</button>
         `;
         el.querySelector('button').addEventListener('click', () => {
           if (!app.user){ openModal(modalLogin); return; }
-          alert(c.more || translations[currentLang]['no_info'] || 'Информация появится позже');
+          alert(c.more || 'Информация появится позже');
         });
         list.appendChild(el); revealIO.observe(el);
       });
@@ -2134,7 +1818,7 @@
         contact:  r['связаться'] || ''
       }));
       const types = unique(app.data.market.map(m => m.type));
-      fillSelectOptions(document.getElementById('market-type'), types, 'all');
+      fillSelectOptions(document.getElementById('market-type'), types, 'Барлығы');
       renderMarket();
     }
     function renderMarket(){
@@ -2158,10 +1842,10 @@
           <h3>${m.title}</h3>
           <div class="price">${new Intl.NumberFormat('ru-RU').format(m.price)} ₸</div>
           <div class="muted">${[m.seller,m.location].filter(Boolean).join(' · ')}</div>
-          <button class="btn btn--ghost">${translations[currentLang]['contact'] || 'Связаться'}</button>
+          <button class="btn btn--ghost">Связаться</button>
         `;
         el.querySelector('button').addEventListener('click', () => {
-          if (!m.contact){ alert(translations[currentLang]['no_contact'] || 'Контакт не указан'); return; }
+          if (!m.contact){ alert('Контакт не указан'); return; }
           if (m.contact.startsWith('@')) location.href = 'https://t.me/' + m.contact.slice(1);
           else if (m.contact.replace(/\D/g,'').length >= 10) location.href = 'https://wa.me/' + m.contact.replace(/\D/g,'');
           else location.href = m.contact;
@@ -2206,13 +1890,13 @@
           <div class="chip">${j.cat || '—'}</div>
           <h3>${j.title}</h3>
           <div class="muted">${j.company || '—'}</div>
-          <div class="muted">${translations[currentLang]['deadline'] || 'Дедлайн'}: ${j.deadline || '—'}</div>
+          <div class="muted">Дедлайн: ${j.deadline || '—'}</div>
           <div class="price">${j.sum ? new Intl.NumberFormat('ru-RU').format(j.sum)+' ₸' : '—'}</div>
-          <button class="btn btn--ghost">${translations[currentLang]['apply'] || 'Откликнуться'}</button>
+          <button class="btn btn--ghost">Откликнуться</button>
         `;
         el.querySelector('button').addEventListener('click', () => {
           if (!app.user){ openModal(modalLogin); return; }
-          alert(translations[currentLang]['applied'] || 'Отклик отправлен (демо)');
+          alert('Отклик отправлен (демо)');
         });
         list.appendChild(el); revealIO.observe(el);
       });
@@ -2255,13 +1939,13 @@
           <h3>${g.title}</h3>
           <div class="muted">${g.company || '—'}</div>
           <div class="price">${g.sum ? new Intl.NumberFormat('ru-RU').format(g.sum)+' ₸' : '—'}</div>
-          <div class="muted">${translations[currentLang]['deadline'] || 'Дедлайн'}: ${g.deadline || '—'}</div>
+          <div class="muted">Дедлайн: ${g.deadline || '—'}</div>
           <div class="muted">${g.req || ''}</div>
-          <button class="btn btn--ghost">${translations[currentLang]['apply'] || 'Подать'}</button>
+          <button class="btn btn--ghost">Подать</button>
         `;
         el.querySelector('button').addEventListener('click', () => {
           if (!app.user){ openModal(modalLogin); return; }
-          alert(translations[currentLang]['submitted'] || 'Заявка отправлена (демо)');
+          alert('Заявка отправлена (демо)');
         });
         list.appendChild(el); revealIO.observe(el);
       });
@@ -2282,7 +1966,7 @@
         el.innerHTML = `
           <div class="chip">${s.expert || '—'}</div>
           <div>${s.desc || ''}</div>
-          <button class="btn btn--ghost">${translations[currentLang]['contact'] || 'Связаться'}</button>
+          <button class="btn btn--ghost">Связаться</button>
         `;
         el.querySelector('button').addEventListener('click', () => {
           if (s.contact.startsWith('@')) location.href = 'https://t.me/' + s.contact.slice(1);
@@ -2295,19 +1979,6 @@
 
     /* ===================== INIT ===================== */
     (async function init(){
-      // Установка языка
-      const savedLang = localStorage.getItem('mm_lang') || 'kk';
-      setLanguage(savedLang);
-      
-      // Обработчики переключения языка
-      document.querySelectorAll('.lang-option, .drawer-lang-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const lang = btn.dataset.lang;
-          setLanguage(lang);
-          closeDrawer();
-        });
-      });
-
       // counters only on public sections
       document.querySelectorAll('[data-counter]').forEach(el => counterIO.observe(el));
 
@@ -2316,67 +1987,28 @@
       // reveal animations for all cards already in DOM
       document.querySelectorAll('.card').forEach(card => revealIO.observe(card));
 
-      // load private data (они будут отрендерены только когда авторизованы)
+      // load private data (they will render only when authed)
       await Promise.all([ loadCourses(), loadMarket(), loadJobs(), loadGrants(), loadSupport() ]);
     })();
 
     // закрыть по клику на кнопку "Отмена"
-    document.querySelector('#modal-login [data-close]')?.addEventListener('click', () => {
-      closeModal(modalLogin);
-    });
-
-    // закрыть по клику по фону
-    modalLogin.addEventListener('click', (e) => {
-      if (e.target === modalLogin) closeModal(modalLogin);
-    });
-
-    // закрыть по Esc (для <dialog> это событие 'cancel')
-    modalLogin.addEventListener('cancel', (e) => {
-      e.preventDefault(); // чтобы не было дефолтной анимации, если не нужна
-      closeModal(modalLogin);
-    });
-
-    // ДОбавь в translations.kk
-Object.assign(translations.kk, {
-  duration_weeks: "апт",
-  free: "Тегін",
-  details: "Толығырақ",
-  no_info: "Ақпарат кейінірек жарияланады",
-  contact: "Байланысу",
-  no_contact: "Байланыс көрсетілмеген",
-  deadline: "Дедлайн",
-  apply: "Өтініш беру",
-  applied: "Өтініш жіберілді (демо)",
-  submitted: "Өтініш жіберілді (демо)",
+document.querySelector('#modal-login [data-close]')?.addEventListener('click', () => {
+  closeModal(modalLogin);
 });
 
-// ДОбавь в translations.ru
-Object.assign(translations.ru, {
-  duration_weeks: "нед",
-  free: "Бесплатно",
-  details: "Подробнее",
-  no_info: "Информация появится позже",
-  contact: "Связаться",
-  no_contact: "Контакт не указан",
-  deadline: "Дедлайн",
-  apply: "Откликнуться",
-  applied: "Отклик отправлен (демо)",
-  submitted: "Заявка отправлена (демо)",
+// закрыть по клику по фону
+modalLogin.addEventListener('click', (e) => {
+  if (e.target === modalLogin) closeModal(modalLogin);
 });
 
-// ДОбавь в translations.en
-Object.assign(translations.en, {
-  duration_weeks: "wk",
-  free: "Free",
-  details: "Details",
-  no_info: "Info will appear later",
-  contact: "Contact",
-  no_contact: "No contact provided",
-  deadline: "Deadline",
-  apply: "Apply",
-  applied: "Applied (demo)",
-  submitted: "Submitted (demo)",
+// закрыть по Esc (для <dialog> это событие 'cancel')
+modalLogin.addEventListener('cancel', (e) => {
+  e.preventDefault(); // чтобы не было дефолтной анимации, если не нужна
+  closeModal(modalLogin);
 });
   </script>
 </body>
 </html>
+
+
+
